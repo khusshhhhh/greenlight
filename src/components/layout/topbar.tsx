@@ -6,6 +6,7 @@ import { Search, Plus, LogOut, User as UserIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,10 +49,12 @@ export function Topbar({ user }: { user: TopbarUser }) {
           </Link>
         </Button>
 
+        <Separator orientation="vertical" className="mx-1 h-7" />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground"
+              className="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground ring-2 ring-transparent transition hover:ring-ring/40"
               aria-label="Account menu"
             >
               {initial}

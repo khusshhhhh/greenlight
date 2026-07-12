@@ -20,49 +20,23 @@ import { Button } from "@/components/ui/button";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { HeroGraphic } from "@/components/hero-graphic";
+import { Typewriter } from "@/components/typewriter";
+import { Reveal } from "@/components/reveal";
 import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 const STEPS = [
-  {
-    icon: UserPlus,
-    title: "Create your account",
-    body: "Sign up in seconds and subscribe. Your workspace is private to you.",
-  },
-  {
-    icon: FolderPlus,
-    title: "Add a project",
-    body: "Enter the property, client and council. Every Planning, BRC and Land Division task is generated automatically.",
-  },
-  {
-    icon: ListChecks,
-    title: "Track & assign",
-    body: "Update statuses, assign consultants, chase RFIs and watch auto-calculated due dates.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "Get greenlit",
-    body: "See every approval through to final titles — nothing slips through the cracks.",
-  },
+  { icon: UserPlus, title: "Create your account", body: "Sign up in seconds and subscribe. Your workspace is private to you." },
+  { icon: FolderPlus, title: "Add a project", body: "Enter the property, client and council. Every Planning, BRC and Land Division task is generated automatically." },
+  { icon: ListChecks, title: "Track & assign", body: "Update statuses, assign consultants, chase RFIs and watch auto-calculated due dates." },
+  { icon: CheckCircle2, title: "Get greenlit", body: "See every approval through to final titles — nothing slips through the cracks." },
 ];
 
 const WORKFLOWS = [
-  {
-    icon: ClipboardCheck,
-    title: "Planning Approval",
-    body: "Land papers, contour survey, concept plans & variations, planning drawings, S&D, PlanSA lodgement and RFIs — through to approval.",
-  },
-  {
-    icon: Building2,
-    title: "Development / BRC",
-    body: "Working drawings, energy rating, footing report, take-offs, CITB levy and the private certifier BRC application, with a live missing-documents gate.",
-  },
-  {
-    icon: Map,
-    title: "Land Division",
-    body: "From sending the job through pegging, SA Water, Open Space and SCAP — all the way to final titles.",
-  },
+  { icon: ClipboardCheck, title: "Planning Approval", body: "Land papers, contour survey, concept plans & variations, planning drawings, S&D, PlanSA lodgement and RFIs — through to approval." },
+  { icon: Building2, title: "Development / BRC", body: "Working drawings, energy rating, footing report, take-offs, CITB levy and the private certifier BRC application, with a live missing-documents gate." },
+  { icon: Map, title: "Land Division", body: "From sending the job through pegging, SA Water, Open Space and SCAP — all the way to final titles." },
 ];
 
 const FEATURES = [
@@ -90,15 +64,27 @@ export default async function LandingPage() {
           Built for South Australian residential development
         </div>
         <h1 className="gl-rise mx-auto max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl" style={{ animationDelay: "0.05s" }}>
-          Get every approval{" "}
-          <span className="text-emerald-500">greenlit</span> — on time.
+          Get every approval <span className="text-emerald-500">greenlit</span> — on time.
         </h1>
-        <p className="gl-rise mx-auto mt-6 max-w-2xl text-lg text-muted-foreground" style={{ animationDelay: "0.1s" }}>
+        <p className="gl-rise mt-4 text-lg font-medium sm:text-xl" style={{ animationDelay: "0.08s" }}>
+          <span className="text-muted-foreground">We track </span>
+          <Typewriter
+            className="text-emerald-500 font-semibold"
+            words={[
+              "Planning Approval",
+              "Development / BRC",
+              "Land Division",
+              "every council RFI",
+              "every due date",
+            ]}
+          />
+        </p>
+        <p className="gl-rise mx-auto mt-6 max-w-2xl text-lg text-muted-foreground" style={{ animationDelay: "0.12s" }}>
           Greenlight replaces the paper checklist with a modern tracker for
           Planning, Building Rules Consent and Land Division. Assign consultants,
           chase RFIs, watch due dates — and never lose a project in the pile again.
         </p>
-        <div className="gl-rise mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row" style={{ animationDelay: "0.15s" }}>
+        <div className="gl-rise mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row" style={{ animationDelay: "0.16s" }}>
           <Button asChild size="lg">
             <Link href={ctaHref}>
               {loggedIn ? "Open dashboard" : "Get started"}
@@ -115,7 +101,7 @@ export default async function LandingPage() {
 
       {/* How it works */}
       <section id="how" className="border-t bg-muted/20 py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <Reveal className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="text-center">
             <span className="text-sm font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
               How it works
@@ -131,7 +117,7 @@ export default async function LandingPage() {
             {STEPS.map((s, i) => {
               const Icon = s.icon;
               return (
-                <div key={s.title} className="relative rounded-xl border bg-card p-6">
+                <div key={s.title} className="gl-hover-lift relative rounded-xl border bg-card p-6">
                   <span className="absolute right-4 top-4 text-3xl font-bold text-muted/40">
                     {i + 1}
                   </span>
@@ -144,12 +130,12 @@ export default async function LandingPage() {
               );
             })}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Workflows */}
       <section className="py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <Reveal className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight">Three workflows, one place</h2>
             <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
@@ -160,7 +146,7 @@ export default async function LandingPage() {
             {WORKFLOWS.map((w) => {
               const Icon = w.icon;
               return (
-                <div key={w.title} className="rounded-xl border bg-card p-6">
+                <div key={w.title} className="gl-hover-lift rounded-xl border bg-card p-6">
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                     <Icon className="h-5 w-5" />
                   </div>
@@ -170,12 +156,12 @@ export default async function LandingPage() {
               );
             })}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Features */}
       <section className="border-t bg-muted/20 py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <Reveal className="mx-auto max-w-6xl px-4 sm:px-6">
           <h2 className="text-center text-3xl font-bold tracking-tight">
             Everything an approvals office needs
           </h2>
@@ -186,7 +172,7 @@ export default async function LandingPage() {
             {FEATURES.map((f) => {
               const Icon = f.icon;
               return (
-                <div key={f.title} className="rounded-xl border bg-card p-6">
+                <div key={f.title} className="gl-hover-lift rounded-xl border bg-card p-6">
                   <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
                     <Icon className="h-5 w-5" />
                   </div>
@@ -196,12 +182,12 @@ export default async function LandingPage() {
               );
             })}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Mission band */}
       <section className="py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+        <Reveal className="mx-auto max-w-4xl px-4 sm:px-6">
           <div className="rounded-2xl border bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-10 text-center">
             <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500 text-white">
               <Target className="h-5 w-5" />
@@ -217,12 +203,12 @@ export default async function LandingPage() {
               <Link href="/about">Read our story</Link>
             </Button>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* CTA */}
       <section className="border-t py-20">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+        <Reveal className="mx-auto max-w-3xl px-4 text-center sm:px-6">
           <h2 className="text-3xl font-bold tracking-tight">Ready to clear your approvals?</h2>
           <p className="mt-3 text-muted-foreground">
             Create your account and add your first project in minutes. A$200/month, cancel anytime.
@@ -233,7 +219,7 @@ export default async function LandingPage() {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
-        </div>
+        </Reveal>
       </section>
 
       <SiteFooter />

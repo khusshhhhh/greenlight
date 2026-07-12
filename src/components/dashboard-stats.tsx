@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import type { DashboardStats as Stats } from "@/lib/queries";
+import { CountUp } from "@/components/count-up";
 import { cn } from "@/lib/utils";
 
 const ICONS = {
@@ -44,11 +45,13 @@ function Stat({
   }[tone];
 
   return (
-    <Card>
+    <Card className="gl-hover-lift">
       <CardContent className="flex items-start justify-between gap-3 p-5">
         <div className="min-w-0">
           <p className="text-sm font-medium text-muted-foreground">{label}</p>
-          <p className="mt-1 text-3xl font-semibold tracking-tight">{value}</p>
+          <p className="mt-1 text-3xl font-semibold tracking-tight">
+            {typeof value === "number" ? <CountUp value={value} /> : value}
+          </p>
           {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
         </div>
         <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", toneClass)}>

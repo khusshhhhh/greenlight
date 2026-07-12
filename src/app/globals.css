@@ -4,77 +4,77 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    --background: 150 33% 98%;
+    --foreground: 155 30% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 155 30% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 155 30% 12%;
 
-    --primary: 222 47% 20%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 152 55% 30%;
+    --primary-foreground: 150 40% 98%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 20%;
+    --secondary: 150 32% 94%;
+    --secondary-foreground: 152 42% 22%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 150 25% 95%;
+    --muted-foreground: 155 14% 40%;
 
-    --accent: 210 40% 94%;
-    --accent-foreground: 222 47% 20%;
+    --accent: 150 42% 91%;
+    --accent-foreground: 152 45% 22%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --success: 152 60% 40%;
+    --success: 152 62% 34%;
     --success-foreground: 0 0% 100%;
 
     --warning: 38 92% 50%;
-    --warning-foreground: 222 47% 11%;
+    --warning-foreground: 40 45% 12%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 222 47% 30%;
+    --border: 150 22% 87%;
+    --input: 150 22% 87%;
+    --ring: 152 55% 34%;
 
     --radius: 0.75rem;
   }
 
   .dark {
-    --background: 222 47% 8%;
-    --foreground: 210 40% 96%;
+    --background: 158 30% 7%;
+    --foreground: 150 22% 96%;
 
-    --card: 222 44% 11%;
-    --card-foreground: 210 40% 96%;
+    --card: 158 26% 10%;
+    --card-foreground: 150 22% 96%;
 
-    --popover: 222 44% 11%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 158 26% 10%;
+    --popover-foreground: 150 22% 96%;
 
-    --primary: 210 40% 96%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 152 52% 44%;
+    --primary-foreground: 155 45% 8%;
 
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 156 20% 16%;
+    --secondary-foreground: 150 22% 96%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 156 20% 16%;
+    --muted-foreground: 150 15% 64%;
 
-    --accent: 217 33% 20%;
-    --accent-foreground: 210 40% 96%;
+    --accent: 156 24% 20%;
+    --accent-foreground: 150 22% 96%;
 
     --destructive: 0 63% 45%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --success: 152 55% 45%;
-    --success-foreground: 0 0% 100%;
+    --success: 152 55% 46%;
+    --success-foreground: 155 45% 8%;
 
     --warning: 38 92% 55%;
-    --warning-foreground: 222 47% 11%;
+    --warning-foreground: 40 45% 10%;
 
-    --border: 217 33% 20%;
-    --input: 217 33% 22%;
-    --ring: 213 27% 70%;
+    --border: 156 20% 19%;
+    --input: 156 20% 22%;
+    --ring: 152 52% 52%;
   }
 }
 
@@ -205,15 +205,73 @@
   }
 }
 
+/* Typewriter caret */
+@keyframes gl-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.gl-caret {
+  margin-left: 1px;
+  font-weight: 400;
+  animation: gl-blink 1s step-end infinite;
+}
+
+/* Scroll reveal */
+.gl-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: opacity, transform;
+}
+.gl-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Interactive hover lift for cards */
+.gl-hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.gl-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px -12px hsl(var(--foreground) / 0.18);
+}
+
+/* Smooth in-page scrolling + offset for sticky nav anchors */
+html {
+  scroll-behavior: smooth;
+}
+section[id],
+[id].scroll-anchor {
+  scroll-margin-top: 5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .gl-shimmer::after,
   .gl-logo-check,
   .gl-logo-ring,
   .gl-float,
-  .gl-rise {
+  .gl-rise,
+  .gl-caret {
     animation: none !important;
   }
   .gl-logo-check {
     stroke-dashoffset: 0;
+  }
+  .gl-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .gl-hover-lift:hover {
+    transform: none;
   }
 }

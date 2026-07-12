@@ -127,7 +127,7 @@ export function ContactsClient({ contacts }: { contacts: Contact[] }) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((c) => (
-          <Card key={c.id}>
+          <Card key={c.id} className="gl-hover-lift">
             <CardContent className="space-y-2 p-5">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2 font-semibold">
