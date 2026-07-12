@@ -23,7 +23,8 @@ export const authConfig = {
         path === "/" ||
         path.startsWith("/login") ||
         path.startsWith("/signup") ||
-        path.startsWith("/pricing");
+        path.startsWith("/pricing") ||
+        path.startsWith("/about");
 
       if (isPublic) {
         // Signed-in users shouldn't sit on the auth screens.

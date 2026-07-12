@@ -6,13 +6,20 @@ import { login, signup, type AuthState } from "@/lib/auth-actions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { AlertCircle } from "lucide-react";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" className="w-full" size="lg" disabled={pending}>
-      {pending ? "Please wait…" : label}
+      {pending ? (
+        <>
+          <Spinner /> Please wait…
+        </>
+      ) : (
+        label
+      )}
     </Button>
   );
 }
