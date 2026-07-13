@@ -1,7 +1,5 @@
 import { cn } from "@/lib/utils";
 import {
-  PRIORITY_LABEL,
-  PRIORITY_TONE,
   PROJECT_STATUS_LABEL,
   PROJECT_STATUS_TONE,
   RFI_STATUS_LABEL,
@@ -12,12 +10,7 @@ import {
   TONE_DOT,
   type Tone,
 } from "@/lib/constants";
-import type {
-  Priority,
-  ProjectStatus,
-  RFIStatus,
-  TaskStatus,
-} from "@prisma/client";
+import type { ProjectStatus, RFIStatus, TaskStatus } from "@prisma/client";
 
 export function ToneBadge({
   tone,
@@ -65,10 +58,6 @@ export function TaskStatusBadge({
 
 export function ProjectStatusBadge({ status }: { status: ProjectStatus }) {
   return <ToneBadge tone={PROJECT_STATUS_TONE[status]} label={PROJECT_STATUS_LABEL[status]} />;
-}
-
-export function PriorityBadge({ priority }: { priority: Priority }) {
-  return <ToneBadge tone={PRIORITY_TONE[priority]} label={PRIORITY_LABEL[priority]} dot={false} />;
 }
 
 export function RfiStatusBadge({ status }: { status: RFIStatus }) {

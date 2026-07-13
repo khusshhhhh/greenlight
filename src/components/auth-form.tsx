@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { login, signup, type AuthState } from "@/lib/auth-actions";
@@ -7,7 +8,38 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
+
+function PasswordField({ mode }: { mode: "login" | "signup" }) {
+  const [show, setShow] = React.useState(false);
+  return (
+    <div>
+      <Label htmlFor="password" className="mb-1.5 block">
+        Password
+      </Label>
+      <div className="relative">
+        <Input
+          id="password"
+          name="password"
+          type={show ? "text" : "password"}
+          autoComplete={mode === "login" ? "current-password" : "new-password"}
+          required
+          className="pr-10"
+          placeholder={mode === "signup" ? "At least 8 characters" : "••••••••"}
+        />
+        <button
+          type="button"
+          onClick={() => setShow((s) => !s)}
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+          aria-label={show ? "Hide password" : "Show password"}
+          tabIndex={-1}
+        >
+          {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -60,19 +92,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         />
       </div>
 
-      <div>
-        <Label htmlFor="password" className="mb-1.5 block">
-          Password
-        </Label>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete={mode === "login" ? "current-password" : "new-password"}
-          required
-          placeholder={mode === "signup" ? "At least 8 characters" : "••••••••"}
-        />
-      </div>
+      <PasswordField mode={mode} />
 
       <SubmitButton label={mode === "login" ? "Log in" : "Create account"} />
 

@@ -2,25 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  FolderKanban,
-  Users,
-  FileWarning,
-  CalendarDays,
-  Settings,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
-
-const NAV = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/projects", label: "Projects", icon: FolderKanban },
-  { href: "/rfis", label: "RFIs", icon: FileWarning },
-  { href: "/contacts", label: "Contacts", icon: Users },
-  { href: "/calendar", label: "Calendar", icon: CalendarDays },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
+import { NAV } from "@/components/layout/nav-items";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -49,7 +33,7 @@ export function Sidebar() {
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
               )}
             >
-              <Icon className="h-4.5 w-4.5" />
+              <Icon className="h-[18px] w-[18px]" />
               {item.label}
             </Link>
           );
@@ -60,7 +44,6 @@ export function Sidebar() {
         <p className="font-medium text-foreground">Residential Approvals</p>
         <p>Planning · BRC · Land Division</p>
       </div>
-      {/* South Australia workspace */}
     </aside>
   );
 }

@@ -136,7 +136,7 @@
     hsl(var(--foreground) / 0.06),
     transparent
   );
-  animation: gl-shimmer 1.6s infinite;
+  animation: gl-shimmer 1.2s infinite;
 }
 
 /* Logo: draw the check stroke, then a soft breathing pulse */

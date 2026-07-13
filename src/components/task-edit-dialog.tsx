@@ -14,14 +14,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
-  PRIORITY_LABEL,
   TASK_STATUS_LABEL,
   TASK_STATUS_ORDER,
   CONTACT_ROLE_LABEL,
-  enumOptions,
 } from "@/lib/constants";
 import { toInputDate } from "@/lib/dates";
-import type { Priority } from "@prisma/client";
 import type { TaskWithRelations, ContactOption } from "@/lib/client-types";
 
 export function TaskEditDialog({
@@ -73,16 +70,6 @@ export function TaskEditDialog({
                 {TASK_STATUS_ORDER.map((s) => (
                   <option key={s} value={s}>
                     {TASK_STATUS_LABEL[s]}
-                  </option>
-                ))}
-              </Select>
-            </div>
-            <div>
-              <Label className="mb-1.5 block">Priority</Label>
-              <Select name="priority" defaultValue={task.priority}>
-                {enumOptions<Priority>(PRIORITY_LABEL).map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
                   </option>
                 ))}
               </Select>

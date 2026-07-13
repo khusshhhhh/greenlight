@@ -2,8 +2,10 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isSubscriptionActive } from "@/lib/billing";
+import { getNotifications } from "@/lib/queries";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import { IdleTimeout } from "@/components/idle-timeout";
 
 export default async function AppLayout({
   children,
@@ -13,20 +15,33 @@ export default async function AppLayout({
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
-  // Subscription gate — no active plan means no access to the app.
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { stripeStatus: true, stripeCurrentPeriodEnd: true },
+    select: {
+      name: true,
+      email: true,
+      image: true,
+      notificationsEnabled: true,
+      stripeStatus: true,
+      stripeCurrentPeriodEnd: true,
+    },
   });
   if (!user || !isSubscriptionActive(user)) redirect("/billing");
+
+  const notifications = await getNotifications(session.user.id);
 
   return (
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar user={session.user} />
+        <Topbar
+          user={{ name: user.name, email: user.email, image: user.image }}
+          notifications={notifications}
+          notificationsEnabled={user.notificationsEnabled}
+        />
         <main className="flex-1 p-4 md:p-6 lg:p-8">{children}</main>
       </div>
+      <IdleTimeout />
     </div>
   );
 }

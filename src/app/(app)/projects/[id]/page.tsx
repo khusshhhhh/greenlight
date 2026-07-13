@@ -18,7 +18,7 @@ import { NotesPanel } from "@/components/notes-panel";
 import { ActivityFeed } from "@/components/activity-feed";
 import { KanbanBoard } from "@/components/kanban-board";
 import { ProjectActions } from "@/components/project-actions";
-import { ProjectStatusBadge, PriorityBadge } from "@/components/status-badge";
+import { ProjectStatusBadge } from "@/components/status-badge";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +52,6 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
           <h1 className="text-2xl font-semibold tracking-tight">{project.name}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <ProjectStatusBadge status={project.status} />
-            <PriorityBadge priority={project.priority} />
             {project.council && (
               <span className="text-sm text-muted-foreground">{project.council}</span>
             )}

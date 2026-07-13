@@ -11,7 +11,6 @@ export const projectSchema = z.object({
   applicationNumber: z.string().optional(),
   planSAReference: z.string().optional(),
   status: z.string().optional(),
-  priority: z.string().optional(),
   startDate: z.string().optional(),
   targetDate: z.string().optional(),
   notes: z.string().optional(),

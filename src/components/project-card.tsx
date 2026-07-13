@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MapPin, User, Landmark, AlertTriangle, FileWarning } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ProjectStatusBadge, PriorityBadge } from "@/components/status-badge";
+import { ProjectStatusBadge } from "@/components/status-badge";
 import { projectProgress } from "@/lib/business";
 import type { Project, Task, RFI } from "@prisma/client";
 
@@ -22,12 +22,9 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
     <Link href={`/projects/${project.id}`} className="group block">
       <Card className="h-full transition-all hover:shadow-md hover:-translate-y-0.5">
         <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold leading-tight group-hover:text-primary">
-              {project.name}
-            </h3>
-            <PriorityBadge priority={project.priority} />
-          </div>
+          <h3 className="font-semibold leading-tight group-hover:text-primary">
+            {project.name}
+          </h3>
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <ProjectStatusBadge status={project.status} />
             {overdue > 0 && (

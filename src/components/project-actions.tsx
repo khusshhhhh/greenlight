@@ -109,7 +109,6 @@ export function ProjectActions({
               applicationNumber: project.applicationNumber ?? "",
               planSAReference: project.planSAReference ?? "",
               status: project.status,
-              priority: project.priority,
               startDate: toInputDate(project.startDate),
               targetDate: toInputDate(project.targetDate),
               notes: project.notes ?? "",

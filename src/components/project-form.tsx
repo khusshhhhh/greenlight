@@ -10,12 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  PRIORITY_LABEL,
-  PROJECT_STATUS_LABEL,
-  enumOptions,
-} from "@/lib/constants";
-import type { Priority, ProjectStatus } from "@prisma/client";
+import { PROJECT_STATUS_LABEL, enumOptions } from "@/lib/constants";
+import type { ProjectStatus } from "@prisma/client";
 
 interface Props {
   councils: string[];
@@ -35,7 +31,6 @@ export function ProjectForm({ councils, defaultValues, action, submitLabel = "Cr
     resolver: zodResolver(projectSchema),
     defaultValues: {
       status: "ACTIVE",
-      priority: "MEDIUM",
       ...defaultValues,
     },
   });
@@ -114,15 +109,6 @@ export function ProjectForm({ councils, defaultValues, action, submitLabel = "Cr
           <Field label="Status">
             <NativeSelect {...register("status")}>
               {enumOptions<ProjectStatus>(PROJECT_STATUS_LABEL).map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </Field>
-          <Field label="Priority">
-            <NativeSelect {...register("priority")}>
-              {enumOptions<Priority>(PRIORITY_LABEL).map((o) => (
                 <option key={o.value} value={o.value}>
                   {o.label}
                 </option>

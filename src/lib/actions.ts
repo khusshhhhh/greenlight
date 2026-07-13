@@ -455,3 +455,40 @@ export async function updateTaskDuration(id: string, estimatedDays: number) {
   });
   revalidatePath("/settings");
 }
+
+// ---------------------------------------------------------------------------
+// Account / profile
+// ---------------------------------------------------------------------------
+
+export async function setNotificationsEnabled(enabled: boolean) {
+  const userId = await requireUserId();
+  await prisma.user.update({
+    where: { id: userId },
+    data: { notificationsEnabled: enabled },
+  });
+  revalidatePath("/settings");
+  revalidatePath("/dashboard");
+}
+
+export async function updateProfile(fd: FormData) {
+  const userId = await requireUserId();
+  const name = str(fd, "name");
+  const image = str(fd, "image"); // data URL or "" to clear
+
+  // Guard against oversized images (client resizes to ~256px first).
+  if (image && image.length > 800_000) {
+    throw new Error("Image is too large. Please choose a smaller photo.");
+  }
+  if (image && !/^data:image\//.test(image) && image !== "__clear__") {
+    throw new Error("Invalid image.");
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...(name ? { name } : {}),
+      ...(image === "__clear__" ? { image: null } : image ? { image } : {}),
+    },
+  });
+  revalidatePath("/settings");
+}

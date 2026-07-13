@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { ProjectStatusBadge, PriorityBadge } from "@/components/status-badge";
+import { ProjectStatusBadge } from "@/components/status-badge";
 import { fmtDate } from "@/lib/dates";
 import {
   MapPin,
@@ -37,7 +37,6 @@ export function ProjectSummaryCard({
       <CardContent className="space-y-4 p-5">
         <div className="flex flex-wrap items-center gap-2">
           <ProjectStatusBadge status={project.status} />
-          <PriorityBadge priority={project.priority} />
         </div>
         <div className="grid grid-cols-1 gap-3">
           <Row icon={MapPin} label="Address" value={project.address} />

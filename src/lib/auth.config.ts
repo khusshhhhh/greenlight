@@ -24,7 +24,9 @@ export const authConfig = {
         path.startsWith("/login") ||
         path.startsWith("/signup") ||
         path.startsWith("/pricing") ||
-        path.startsWith("/about");
+        path.startsWith("/about") ||
+        // Admin area has its own separate authentication (see lib/admin-auth).
+        path.startsWith("/admin");
 
       if (isPublic) {
         // Signed-in users shouldn't sit on the auth screens.

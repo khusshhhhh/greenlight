@@ -2,11 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, Plus, LogOut, User as UserIcon } from "lucide-react";
+import { Search, Plus, LogOut, Settings as SettingsIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { MobileNav } from "@/components/layout/mobile-nav";
+import { NotificationBell } from "@/components/notification-bell";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,20 +18,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/lib/auth-actions";
+import type { NotificationItem } from "@/lib/queries";
 
 interface TopbarUser {
   name?: string | null;
   email?: string | null;
+  image?: string | null;
 }
 
-export function Topbar({ user }: { user: TopbarUser }) {
+export function Topbar({
+  user,
+  notifications,
+  notificationsEnabled,
+}: {
+  user: TopbarUser;
+  notifications: NotificationItem[];
+  notificationsEnabled: boolean;
+}) {
   const router = useRouter();
   const initial = (user.name ?? user.email ?? "?").charAt(0).toUpperCase();
 
   return (
-    <header className="no-print sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur md:px-6">
+    <header className="no-print sticky top-0 z-30 flex h-16 items-center gap-2 border-b bg-background/80 px-3 backdrop-blur sm:gap-4 md:px-6">
+      <MobileNav />
+
       <form
-        className="relative flex-1 max-w-md"
+        className="relative flex-1 md:max-w-md"
         onSubmit={(e) => {
           e.preventDefault();
           const q = new FormData(e.currentTarget).get("q")?.toString().trim();
@@ -37,10 +51,11 @@ export function Topbar({ user }: { user: TopbarUser }) {
         }}
       >
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input name="q" placeholder="Search projects, addresses…" className="pl-9" />
+        <Input name="q" placeholder="Search projects…" className="pl-9" />
       </form>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 sm:gap-2">
+        <NotificationBell notifications={notifications} enabled={notificationsEnabled} />
         <ThemeToggle />
         <Button asChild size="sm">
           <Link href="/projects/new">
@@ -49,15 +64,20 @@ export function Topbar({ user }: { user: TopbarUser }) {
           </Link>
         </Button>
 
-        <Separator orientation="vertical" className="mx-1 h-7" />
+        <Separator orientation="vertical" className="mx-1 hidden h-7 sm:block" />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              className="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground ring-2 ring-transparent transition hover:ring-ring/40"
+              className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-sm font-semibold text-primary-foreground ring-2 ring-transparent transition hover:ring-ring/40"
               aria-label="Account menu"
             >
-              {initial}
+              {user.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={user.image} alt="" className="h-full w-full object-cover" />
+              ) : (
+                initial
+              )}
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
@@ -70,7 +90,7 @@ export function Topbar({ user }: { user: TopbarUser }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/settings">
-                <UserIcon className="h-4 w-4" /> Settings
+                <SettingsIcon className="h-4 w-4" /> Settings
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
