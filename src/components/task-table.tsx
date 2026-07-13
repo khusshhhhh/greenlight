@@ -21,6 +21,7 @@ import {
 import { TaskStatusBadge } from "@/components/status-badge";
 import { TaskEditDialog } from "@/components/task-edit-dialog";
 import { setTaskStatus, bulkSetTaskStatus, addTaskVariation } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { taskTone, isTaskDone } from "@/lib/business";
 import { fmtDate, daysRemainingLabel } from "@/lib/dates";
 import {
@@ -56,8 +57,10 @@ export function TaskTable({
   }
 
   async function applyBulk(status: TaskStatus) {
+    const n = selected.size;
     await bulkSetTaskStatus([...selected], status);
     setSelected(new Set());
+    toast.success(`${n} task${n === 1 ? "" : "s"} updated`);
   }
 
   return (
@@ -215,7 +218,7 @@ function Row({
                 key={s}
                 onSelect={() =>
                   startTransition(() => {
-                    setTaskStatus(task.id, s);
+                    setTaskStatus(task.id, s).then(() => toast.success("Status changed"));
                   })
                 }
               >
@@ -263,7 +266,11 @@ function AddVariationButton({ parentId }: { parentId: string }) {
       size="sm"
       disabled={pending}
       className="text-muted-foreground"
-      onClick={() => startTransition(() => addTaskVariation(parentId))}
+      onClick={() =>
+        startTransition(() =>
+          addTaskVariation(parentId).then(() => toast.success("Variation added"))
+        )
+      }
     >
       <Plus className="h-4 w-4" /> Add variation
     </Button>

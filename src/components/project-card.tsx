@@ -11,10 +11,11 @@ export type ProjectCardData = Project & {
   rfis: Pick<RFI, "status">[];
   _overdue?: number;
   _openRfis?: number;
+  _progress?: number;
 };
 
 export function ProjectCard({ project }: { project: ProjectCardData }) {
-  const progress = projectProgress(project.tasks);
+  const progress = project._progress ?? projectProgress(project.tasks);
   const overdue = project._overdue ?? 0;
   const openRfis = project._openRfis ?? 0;
 

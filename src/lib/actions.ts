@@ -108,6 +108,15 @@ export async function createProject(fd: FormData) {
       startDate,
       targetDate: date(fd, "targetDate"),
       notes: str(fd, "notes"),
+      stakeholderName: str(fd, "stakeholderName"),
+      stakeholderRole: str(fd, "stakeholderRole"),
+      stakeholderContact: str(fd, "stakeholderContact"),
+      storeys: str(fd, "storeys"),
+      bedrooms: num(fd, "bedrooms"),
+      bathrooms: num(fd, "bathrooms"),
+      showers: num(fd, "showers"),
+      livingAreas: num(fd, "livingAreas"),
+      carSpaces: num(fd, "carSpaces"),
     },
   });
 
@@ -139,6 +148,15 @@ export async function updateProject(projectId: string, fd: FormData) {
       startDate: date(fd, "startDate"),
       targetDate: date(fd, "targetDate"),
       notes: str(fd, "notes"),
+      stakeholderName: str(fd, "stakeholderName"),
+      stakeholderRole: str(fd, "stakeholderRole"),
+      stakeholderContact: str(fd, "stakeholderContact"),
+      storeys: str(fd, "storeys"),
+      bedrooms: num(fd, "bedrooms"),
+      bathrooms: num(fd, "bathrooms"),
+      showers: num(fd, "showers"),
+      livingAreas: num(fd, "livingAreas"),
+      carSpaces: num(fd, "carSpaces"),
     },
   });
   await logActivity({ projectId, action: "Project updated" });

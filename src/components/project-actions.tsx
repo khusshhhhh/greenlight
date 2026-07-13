@@ -22,6 +22,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ProjectForm } from "@/components/project-form";
 import { setProjectStatus, deleteProject, updateProject } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { toInputDate } from "@/lib/dates";
 import type { Project } from "@prisma/client";
 
@@ -38,6 +39,7 @@ export function ProjectActions({
 
   const editAction = async (fd: FormData) => {
     await updateProject(project.id, fd);
+    toast.success("Project updated");
     setEditOpen(false);
     router.refresh();
   };
@@ -56,7 +58,13 @@ export function ProjectActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
-            onSelect={() => startTransition(() => setProjectStatus(project.id, "APPROVED"))}
+            onSelect={() =>
+              startTransition(() =>
+                setProjectStatus(project.id, "APPROVED").then(() =>
+                  toast.success("Project approved")
+                )
+              )
+            }
           >
             <CheckCircle2 className="h-4 w-4" /> Mark approved
           </DropdownMenuItem>
@@ -72,7 +80,13 @@ export function ProjectActions({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onSelect={() => startTransition(() => setProjectStatus(project.id, "ARCHIVED"))}
+            onSelect={() =>
+              startTransition(() =>
+                setProjectStatus(project.id, "ARCHIVED").then(() =>
+                  toast.success("Project archived")
+                )
+              )
+            }
           >
             <Archive className="h-4 w-4" /> Archive
           </DropdownMenuItem>
@@ -112,6 +126,15 @@ export function ProjectActions({
               startDate: toInputDate(project.startDate),
               targetDate: toInputDate(project.targetDate),
               notes: project.notes ?? "",
+              stakeholderName: project.stakeholderName ?? "",
+              stakeholderRole: project.stakeholderRole ?? "",
+              stakeholderContact: project.stakeholderContact ?? "",
+              storeys: project.storeys ?? "",
+              bedrooms: project.bedrooms != null ? String(project.bedrooms) : "",
+              bathrooms: project.bathrooms != null ? String(project.bathrooms) : "",
+              showers: project.showers != null ? String(project.showers) : "",
+              livingAreas: project.livingAreas != null ? String(project.livingAreas) : "",
+              carSpaces: project.carSpaces != null ? String(project.carSpaces) : "",
             }}
           />
         </DialogContent>

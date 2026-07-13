@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { ToneBadge } from "@/components/status-badge";
 import { createContact } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { CONTACT_ROLE_LABEL } from "@/lib/constants";
 import type { Contact, ContactRole } from "@prisma/client";
 
@@ -43,7 +44,10 @@ export function ContactsClient({ contacts }: { contacts: Contact[] }) {
     const fd = new FormData(e.currentTarget);
     try {
       await createContact(fd);
+      toast.success("Contact created");
       setOpen(false);
+    } catch {
+      toast.error("Couldn't create contact");
     } finally {
       setPending(false);
     }

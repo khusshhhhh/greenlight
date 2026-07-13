@@ -11,6 +11,13 @@ import {
   FileText,
   Calendar,
   UserCog,
+  BedDouble,
+  Bath,
+  ShowerHead,
+  Sofa,
+  Car,
+  Building,
+  UserCheck,
 } from "lucide-react";
 import type { Project, User as UserModel } from "@prisma/client";
 
@@ -50,7 +57,22 @@ export function ProjectSummaryCard({
           <Row icon={Calendar} label="Start date" value={fmtDate(project.startDate)} />
           <Row icon={Calendar} label="Target completion" value={fmtDate(project.targetDate)} />
           <Row icon={UserCog} label="Assigned staff" value={project.assignee?.name} />
+          <Row
+            icon={UserCheck}
+            label="Responsible stakeholder"
+            value={
+              project.stakeholderName
+                ? [project.stakeholderName, project.stakeholderRole]
+                    .filter(Boolean)
+                    .join(" · ")
+                : null
+            }
+          />
+          <Row icon={Phone} label="Stakeholder contact" value={project.stakeholderContact} />
         </div>
+
+        <DwellingDetails project={project} />
+
         {project.notes && (
           <div className="rounded-lg bg-muted/40 p-3 text-sm">
             <p className="mb-1 text-xs font-medium text-muted-foreground">Notes</p>
@@ -59,5 +81,47 @@ export function ProjectSummaryCard({
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function Spec({ icon: Icon, value, label }: { icon: any; value?: number | null; label: string }) {
+  if (value == null) return null;
+  return (
+    <div className="flex items-center gap-1.5 rounded-lg border bg-muted/30 px-2.5 py-1.5">
+      <Icon className="h-4 w-4 text-muted-foreground" />
+      <span className="text-sm font-semibold">{value}</span>
+      <span className="text-xs text-muted-foreground">{label}</span>
+    </div>
+  );
+}
+
+function DwellingDetails({ project }: { project: Project }) {
+  const hasAny =
+    project.storeys != null ||
+    project.bedrooms != null ||
+    project.bathrooms != null ||
+    project.showers != null ||
+    project.livingAreas != null ||
+    project.carSpaces != null;
+  if (!hasAny) return null;
+
+  return (
+    <div>
+      <p className="mb-2 text-xs font-medium text-muted-foreground">Dwelling details</p>
+      <div className="flex flex-wrap gap-2">
+        {project.storeys && (
+          <div className="flex items-center gap-1.5 rounded-lg border bg-muted/30 px-2.5 py-1.5">
+            <Building className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-semibold">{project.storeys}</span>
+            <span className="text-xs text-muted-foreground">storey</span>
+          </div>
+        )}
+        <Spec icon={BedDouble} value={project.bedrooms} label="bed" />
+        <Spec icon={Bath} value={project.bathrooms} label="bath" />
+        <Spec icon={ShowerHead} value={project.showers} label="shower" />
+        <Spec icon={Sofa} value={project.livingAreas} label="living" />
+        <Spec icon={Car} value={project.carSpaces} label="car" />
+      </div>
+    </div>
   );
 }

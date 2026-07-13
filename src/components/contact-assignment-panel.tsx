@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { assignContact, unassignContact } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { CONTACT_ROLE_LABEL } from "@/lib/constants";
 import type { ContactRole } from "@prisma/client";
 import type { ProjectContactWithContact, ContactOption } from "@/lib/client-types";
@@ -48,7 +49,10 @@ export function ContactAssignmentPanel({
     const fd = new FormData(e.currentTarget);
     try {
       await assignContact(projectId, fd);
+      toast.success("Contact assigned");
       setOpen(false);
+    } catch {
+      toast.error("Couldn't assign contact");
     } finally {
       setPending(false);
     }
@@ -153,7 +157,11 @@ function UnassignButton({ id, projectId }: { id: string; projectId: string }) {
       size="icon"
       className="h-7 w-7 shrink-0 text-muted-foreground"
       disabled={pending}
-      onClick={() => startTransition(() => unassignContact(id, projectId))}
+      onClick={() =>
+        startTransition(() =>
+          unassignContact(id, projectId).then(() => toast.success("Contact removed"))
+        )
+      }
     >
       <X className="h-4 w-4" />
     </Button>

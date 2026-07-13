@@ -19,6 +19,7 @@ import {
   CONTACT_ROLE_LABEL,
 } from "@/lib/constants";
 import { toInputDate } from "@/lib/dates";
+import { toast } from "@/components/ui/toast";
 import type { TaskWithRelations, ContactOption } from "@/lib/client-types";
 
 export function TaskEditDialog({
@@ -41,7 +42,10 @@ export function TaskEditDialog({
     const fd = new FormData(e.currentTarget);
     try {
       await updateTask(task!.id, fd);
+      toast.success("Task updated");
       onOpenChange(false);
+    } catch {
+      toast.error("Couldn't update task", "Please try again.");
     } finally {
       setPending(false);
     }

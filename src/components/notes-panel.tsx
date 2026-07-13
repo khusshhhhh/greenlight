@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { addNote } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { fmtDateTime } from "@/lib/dates";
 import { StickyNote } from "lucide-react";
 import type { Note } from "@/lib/client-types";
@@ -19,7 +20,10 @@ export function NotesPanel({ projectId, notes }: { projectId: string; notes: Not
     const fd = new FormData(e.currentTarget);
     try {
       await addNote(projectId, fd);
+      toast.success("Note added");
       formRef.current?.reset();
+    } catch {
+      toast.error("Couldn't add note");
     } finally {
       setPending(false);
     }

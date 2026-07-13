@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import { NotificationBell } from "@/components/notification-bell";
+import { NotificationPanel } from "@/components/notification-panel";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,7 +43,7 @@ export function Topbar({
       <MobileNav />
 
       <form
-        className="relative flex-1 md:max-w-md"
+        className="relative w-full max-w-xs sm:max-w-sm"
         onSubmit={(e) => {
           e.preventDefault();
           const q = new FormData(e.currentTarget).get("q")?.toString().trim();
@@ -54,8 +54,8 @@ export function Topbar({
         <Input name="q" placeholder="Search projects…" className="pl-9" />
       </form>
 
-      <div className="flex items-center gap-1 sm:gap-2">
-        <NotificationBell notifications={notifications} enabled={notificationsEnabled} />
+      <div className="ml-auto flex items-center gap-1 sm:gap-2">
+        <NotificationPanel notifications={notifications} enabled={notificationsEnabled} />
         <ThemeToggle />
         <Button asChild size="sm">
           <Link href="/projects/new">

@@ -127,6 +127,53 @@ export function ProjectForm({ councils, defaultValues, action, submitLabel = "Cr
         </CardContent>
       </Card>
 
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Responsible stakeholder</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field label="Stakeholder name">
+            <Input {...register("stakeholderName")} placeholder="e.g. Jane Smith" />
+          </Field>
+          <Field label="Role / title">
+            <Input {...register("stakeholderRole")} placeholder="e.g. Project Lead, Developer" />
+          </Field>
+          <Field label="Contact (phone or email)" className="sm:col-span-2">
+            <Input {...register("stakeholderContact")} placeholder="Phone or email" />
+          </Field>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Dwelling details</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          <Field label="Storeys">
+            <NativeSelect {...register("storeys")} defaultValue="">
+              <option value="">—</option>
+              <option value="Single">Single storey</option>
+              <option value="Double">Double storey</option>
+            </NativeSelect>
+          </Field>
+          <Field label="Bedrooms">
+            <Input type="number" min={0} {...register("bedrooms")} />
+          </Field>
+          <Field label="Bathrooms">
+            <Input type="number" min={0} {...register("bathrooms")} />
+          </Field>
+          <Field label="Showers">
+            <Input type="number" min={0} {...register("showers")} />
+          </Field>
+          <Field label="Living areas">
+            <Input type="number" min={0} {...register("livingAreas")} />
+          </Field>
+          <Field label="Car spaces">
+            <Input type="number" min={0} {...register("carSpaces")} />
+          </Field>
+        </CardContent>
+      </Card>
+
       <div className="flex items-center justify-end gap-2">
         <Button type="button" variant="outline" onClick={() => router.back()}>
           Cancel

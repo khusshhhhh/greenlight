@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { updateProfile, setNotificationsEnabled } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 
 /** Resize an image file to a square data URL (max 256px, JPEG). */
 function resizeToDataUrl(file: File, size = 256): Promise<string> {
@@ -74,8 +75,11 @@ export function AccountSettings({
     else if (!preview && image) fd.set("image", "__clear__");
     try {
       await updateProfile(fd);
+      toast.success("Profile updated");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not save.");
+      const msg = err instanceof Error ? err.message : "Could not save.";
+      setError(msg);
+      toast.error("Couldn't save profile", msg);
     } finally {
       setSavingProfile(false);
     }
@@ -85,6 +89,7 @@ export function AccountSettings({
     const next = !notifOn;
     setNotifOn(next);
     await setNotificationsEnabled(next);
+    toast.success(next ? "Notifications on" : "Notifications off");
   }
 
   const initial = (nameValue || email || "?").charAt(0).toUpperCase();

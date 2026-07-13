@@ -14,6 +14,19 @@ export const projectSchema = z.object({
   startDate: z.string().optional(),
   targetDate: z.string().optional(),
   notes: z.string().optional(),
+
+  // Responsible stakeholder
+  stakeholderName: z.string().optional(),
+  stakeholderRole: z.string().optional(),
+  stakeholderContact: z.string().optional(),
+
+  // Dwelling details (kept as strings from the form inputs)
+  storeys: z.string().optional(),
+  bedrooms: z.string().optional(),
+  bathrooms: z.string().optional(),
+  showers: z.string().optional(),
+  livingAreas: z.string().optional(),
+  carSpaces: z.string().optional(),
 });
 
 export type ProjectFormValues = z.infer<typeof projectSchema>;

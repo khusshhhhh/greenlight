@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { RfiStatusBadge } from "@/components/status-badge";
 import { createRfi, updateRfi } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { fmtDate, toInputDate, daysRemainingLabel } from "@/lib/dates";
 import {
   RFI_STATUS_LABEL,
@@ -137,9 +138,16 @@ function RfiDialog({
     setPending(true);
     const fd = new FormData(e.currentTarget);
     try {
-      if (rfi) await updateRfi(rfi.id, fd);
-      else await createRfi(projectId, fd);
+      if (rfi) {
+        await updateRfi(rfi.id, fd);
+        toast.success("RFI updated");
+      } else {
+        await createRfi(projectId, fd);
+        toast.success("RFI created");
+      }
       onDone();
+    } catch {
+      toast.error("Couldn't save RFI");
     } finally {
       setPending(false);
     }

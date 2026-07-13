@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { addDocument } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { DOCUMENT_TYPE_LABEL, WORKFLOW_LABEL, enumOptions } from "@/lib/constants";
 import { fmtDate } from "@/lib/dates";
 import type { DocumentType, WorkflowType } from "@prisma/client";
@@ -49,7 +50,10 @@ export function DocumentList({
     const fd = new FormData(e.currentTarget);
     try {
       await addDocument(projectId, fd);
+      toast.success("Document added");
       setOpen(false);
+    } catch {
+      toast.error("Couldn't add document");
     } finally {
       setPending(false);
     }

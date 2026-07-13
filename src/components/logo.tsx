@@ -21,23 +21,36 @@ export function LogoMark({
     >
       <defs>
         <linearGradient id="gl-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#10b981" />
-          <stop offset="1" stopColor="#059669" />
+          <stop stopColor="#34d399" />
+          <stop offset="0.55" stopColor="#10b981" />
+          <stop offset="1" stopColor="#047857" />
+        </linearGradient>
+        <linearGradient id="gl-hi" x1="20" y1="0" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#fff" stopOpacity="0.22" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <rect width="40" height="40" rx="11" fill="url(#gl-grad)" />
+      <rect width="40" height="40" rx="11.5" fill="url(#gl-grad)" />
+      {/* subtle top highlight */}
+      <rect width="40" height="40" rx="11.5" fill="url(#gl-hi)" />
+      {/* open progress ring — a gauge nearing completion / a 'G' opening */}
       <circle
         cx="20"
         cy="20"
-        r="11"
-        fill="#fff"
-        fillOpacity="0.16"
-        className={animated ? "gl-logo-ring" : undefined}
-      />
-      <path
-        d="M14 20.5l4 4 8-9"
+        r="9.5"
+        fill="none"
         stroke="#fff"
-        strokeWidth="3.2"
+        strokeOpacity="0.85"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeDasharray="45 15"
+        transform="rotate(128 20 20)"
+      />
+      {/* core check */}
+      <path
+        d="M15.5 20.4l3.1 3.2 6.2-7.4"
+        stroke="#fff"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
         className={animated ? "gl-logo-check" : undefined}

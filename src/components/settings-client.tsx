@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ToneBadge } from "@/components/status-badge";
 import { addCouncil, updateTaskDuration } from "@/lib/actions";
+import { toast } from "@/components/ui/toast";
 import { useTheme } from "next-themes";
 import { CONTACT_ROLE_LABEL, WORKFLOW_LABEL } from "@/lib/constants";
 import type { ContactRole, WorkflowType } from "@prisma/client";
@@ -39,7 +40,10 @@ export function SettingsClient({
     const fd = new FormData(e.currentTarget);
     try {
       await addCouncil(fd);
+      toast.success("Council added");
       (e.target as HTMLFormElement).reset();
+    } catch {
+      toast.error("Couldn't add council");
     } finally {
       setPending(false);
     }
@@ -152,7 +156,11 @@ function DurationRow({ duration }: { duration: Duration }) {
           <Button
             size="sm"
             disabled={pending}
-            onClick={() => startTransition(() => updateTaskDuration(duration.id, days))}
+            onClick={() =>
+              startTransition(() =>
+                updateTaskDuration(duration.id, days).then(() => toast.success("Duration saved"))
+              )
+            }
           >
             Save
           </Button>

@@ -136,13 +136,13 @@
     hsl(var(--foreground) / 0.06),
     transparent
   );
-  animation: gl-shimmer 1.2s infinite;
+  animation: gl-shimmer 0.6s infinite;
 }
 
 /* Logo: draw the check stroke, then a soft breathing pulse */
 @keyframes gl-draw {
   from {
-    stroke-dashoffset: 44;
+    stroke-dashoffset: 16;
   }
   to {
     stroke-dashoffset: 0;
@@ -160,9 +160,9 @@
   }
 }
 .gl-logo-check {
-  stroke-dasharray: 44;
-  stroke-dashoffset: 44;
-  animation: gl-draw 0.9s ease-out 0.15s forwards;
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: gl-draw 0.8s ease-out 0.15s forwards;
 }
 .gl-logo-ring {
   transform-origin: center;
@@ -203,6 +203,21 @@
   to {
     stroke-dashoffset: 0;
   }
+}
+
+/* Toast entrance */
+@keyframes gl-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+.gl-toast-in {
+  animation: gl-toast-in 0.25s ease-out;
 }
 
 /* Typewriter caret */

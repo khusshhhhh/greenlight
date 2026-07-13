@@ -155,6 +155,20 @@ model Project {
   startDate        DateTime?
   targetDate       DateTime?
   notes            String?
+
+  // Responsible stakeholder for this project
+  stakeholderName    String?
+  stakeholderRole    String?
+  stakeholderContact String?
+
+  // Dwelling details
+  storeys     String? // "Single" | "Double"
+  bedrooms    Int?
+  bathrooms   Int?
+  showers     Int?
+  livingAreas Int?
+  carSpaces   Int?
+
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
