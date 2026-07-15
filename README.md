@@ -1,379 +1,404 @@
 # Greenlight
 
-**Greenlight** is a modern, multi-tenant **SaaS** for tracking residential
-development approval projects in South Australia — **Planning Approval**,
-**Development Approval / BRC** and **Land Division** — in one clean dashboard.
+**A multi-tenant SaaS for tracking residential development approvals in South Australia.**
 
-Users **sign up with email + password**, **subscribe for A$200/month via Stripe**,
-and get their own private workspace. It runs on **Supabase** (PostgreSQL) and
-deploys to **Vercel**.
+Greenlight replaces the paper checklist that development companies and building
+designers use to shepherd a residential project through South Australia's
+approval maze — **Planning Approval**, **Building Rules Consent (BRC) /
+Development Approval**, and **Land Division** — from the first land papers all
+the way to final titles. Every task, date, request-for-information (RFI),
+consultant and document lives in one place, so nothing slips through the cracks.
 
-> 👉 New to all this? Follow **[the complete beginner's guide](#-complete-setup--go-live-guide)** below, top to bottom.
+Each account gets its own private workspace, subscribes for a monthly fee, and
+manages an unlimited number of projects. The application is built with the
+Next.js App Router, runs on a Supabase PostgreSQL database, and bills through
+Stripe.
 
----
-
-## ✨ What it does
-
-- **Accounts & billing** — email/password sign-up, then a paid subscription
-  (A$200/month) is required to access the app. Payments handled by Stripe.
-- **Private per-user data** — every project, contact and setting is scoped to the
-  account (multi-tenant). Users never see each other's data.
-- **Three workflows per project** — Planning, Development / BRC, Land Division,
-  with default tasks created automatically.
-- **Editable task checklists**, auto-calculated due dates, overdue flags,
-  repeatable variations, dependency locks.
-- **Kanban board**, **calendar**, **RFI tracking**, **dashboard** with charts,
-  **contacts**, **documents**, **notes**, **activity log**, **CSV export**,
-  **printable reports** and **dark mode**.
-
-## 🧱 Tech stack
-
-Next.js 14 (App Router) · TypeScript · Tailwind · **Auth.js (NextAuth v5)** ·
-**Supabase (PostgreSQL)** · Prisma · **Stripe** subscriptions · Recharts ·
-date-fns · Lucide.
+> ⚠️ **Independent project.** Greenlight is an independent workflow tool. It is
+> not affiliated with, endorsed by, or connected to PlanSA, SA Water, the CITB,
+> any council, or the Government of South Australia. Domain terms are used
+> descriptively to model the real approval process.
 
 ---
 
-# 🚀 Complete setup & go-live guide
+## Table of contents
 
-From **"I have the code"** to **"customers can sign up and pay"**. No prior
-experience needed — copy the commands, click the buttons.
+- [What it does](#what-it-does)
+- [Feature overview](#feature-overview)
+- [How it works](#how-it-works)
+- [Tech stack](#tech-stack)
+- [Project structure](#project-structure)
+- [Getting started](#getting-started)
+- [Environment variables](#environment-variables)
+- [Available scripts](#available-scripts)
+- [Deployment](#deployment)
+- [The admin console](#the-admin-console)
+- [Security & privacy](#security--privacy)
+- [Glossary of SA approval terms](#glossary-of-sa-approval-terms)
+- [Roadmap ideas](#roadmap-ideas)
+- [License](#license)
 
-| Part | What you'll do |
+---
+
+## What it does
+
+Getting a residential development approved in South Australia means juggling
+councils, PlanSA, architects, engineers, surveyors and private certifiers across
+three overlapping workflows that can each take months. Traditionally that lives
+on a paper checklist — easy to lose track of and impossible to see at a glance.
+
+Greenlight models that entire journey as structured, editable data. When a user
+creates a project, the application automatically generates every default task for
+all three workflows, wires up their dependencies, and calculates due dates.
+Users then update statuses, assign responsible entities, chase RFIs, attach
+document records and watch a live dashboard as each approval moves toward being
+"greenlit".
+
+The product is aimed at residential development companies, building designers and
+project managers who run multiple approvals in parallel.
+
+---
+
+## Feature overview
+
+### Accounts & billing
+
+- Email + password sign-up and login (Auth.js / NextAuth v5, bcrypt-hashed
+  passwords, stateless JWT sessions).
+- A paid subscription (A$200 / month) is required to access the app, handled by
+  Stripe Checkout and the Stripe Customer Portal, kept in sync via webhooks.
+- Idle session timeout with a warning prompt; configurable absolute session
+  lifetime.
+- Editable profile with an uploadable profile picture.
+
+### Projects
+
+- Create, edit, archive and delete projects, each fully isolated to its owner.
+- Rich project record: client details, lot number, council, application and
+  PlanSA reference numbers, schedule dates, notes, and dwelling details
+  (single/double storey, bedrooms, bathrooms, showers, living areas, car spaces).
+- **Responsible entities** per project — Architect, Surveyor, Engineer, Timber
+  Company, Take-off Company, Certifier, Land Division and custom types.
+
+### Three built-in workflows
+
+Default tasks are auto-created for every new project:
+
+- **Planning Approval** — land papers, contour survey & bore log, concept plans
+  and repeatable variations, planning drawings, site & drainage plan, PlanSA
+  lodgement, RFIs, and approval.
+- **Development Approval / BRC** — working drawings, energy rating, footing
+  report, take-offs, CITB levy, the private-certifier BRC application (with a
+  live "missing documents" gate), RFIs, and approval.
+- **Land Division** — from sending the job through pegging, SA Water and Open
+  Space applications and payments, the SCAP plan, and final titles.
+
+### Task management
+
+- Editable task checklist per workflow with statuses, responsible party, linked
+  contact, requested/due/completed dates, estimated days, dependency locks and
+  notes.
+- Automatic due-date calculation and overdue highlighting with colour coding.
+- Repeatable tasks (e.g. concept-plan variations, RFI follow-ups).
+- Bulk status updates and inline status changes.
+
+### Views & tracking
+
+- **Dashboard** — active projects, waiting-on-council, overdue tasks, open RFIs,
+  approvals this month, average approval time, a workflow-status chart, consultant
+  performance and overdue/upcoming lists (with count-up animations).
+- **Kanban board** — drag tasks between status columns.
+- **Calendar** — due dates, RFI response dates and approval milestones by month.
+- **RFI management** — auto-numbered per project and workflow, with a dedicated
+  cross-project RFI page.
+- **Contacts** directory and per-project contact assignment, plus a printable
+  report and CSV export per project.
+
+### Platform
+
+- Real-time, in-memory **search / filter / sort** on the projects list.
+- In-app **notification** system (overdue, due-soon and RFI alerts) in a slide-in
+  panel, toggleable per account.
+- **Toasts** for every save/update action.
+- **Dark mode**, a green brand theme, custom logo, and subtle motion (typewriter
+  hero, scroll reveals, animated stats).
+- Fully **responsive** layout for mobile and tablet.
+- A separate **admin console** for platform-wide (privacy-safe) metrics.
+- Public marketing pages: landing, pricing and about.
+
+---
+
+## How it works
+
+**Workflow templates as the single source of truth.** Every default task, its
+duration and its dependencies are defined once in
+`src/lib/workflow-templates.ts`. Both the database seed and live project creation
+read from these templates, so the workflow logic is never duplicated inside
+components. When a project is created, `src/lib/project-setup.ts` materialises the
+templates into `Workflow` and `Task` rows, resolving dependency references to real
+task IDs and seeding due dates from the project start date. Account-specific
+duration overrides (editable in Settings) are applied at creation time.
+
+**Multi-tenancy.** Projects, contacts, councils and duration settings all carry an
+`ownerId`. Every query and mutation is scoped to the signed-in user, and server
+actions verify ownership before writing. Accounts can never see each other's data.
+
+**Authentication & the paywall.** Auth.js issues a JWT session on login.
+`middleware.ts` protects the app routes and bounces logged-out visitors to
+`/login`. The authenticated area lives under the `src/app/(app)/` route group,
+whose layout additionally checks the user's Stripe subscription status on every
+request — without an active subscription the user is redirected to `/billing`.
+
+**Billing.** `/billing` starts a Stripe Checkout session; a webhook
+(`/api/stripe/webhook`) writes the resulting subscription status, price and
+period-end back onto the `User`. `src/lib/billing.ts` decides whether a
+subscription is currently active (with a short grace window). The Stripe Customer
+Portal handles plan changes and cancellations.
+
+**Server-first rendering.** Pages are React Server Components by default; only
+interactive pieces (tables, kanban, dialogs, forms, search) are client
+components. All mutations run through **Server Actions** with automatic activity
+logging and cache revalidation.
+
+---
+
+## Tech stack
+
+| Area | Technology |
 | --- | --- |
-| 1 | Install Node.js + Git |
-| 2 | Create the Supabase database |
-| 3 | Set up Stripe (the A$200 plan + keys) |
-| 4 | Put your keys into the project (`.env`) |
-| 5 | Install, create tables, add demo data |
-| 6 | Run locally & test a real (test-mode) payment |
-| 7 | Put the code on GitHub |
-| 8 | Deploy to Vercel |
-| 9 | Connect the Stripe webhook in production |
-| 10 | Switch on real payments (go live) |
-
-> 💡 **Running commands:** In File Explorer, open the project folder
-> (`K:\MissionNew\ApprovalFlow SA`), right-click an empty area → **Open in
-> Terminal**. Paste each command, press **Enter**, wait, then do the next.
+| Framework | Next.js 14 (App Router), React 18, TypeScript |
+| Styling | Tailwind CSS, shadcn/ui-style components (Radix primitives) |
+| Auth | Auth.js / NextAuth v5, bcrypt |
+| Database | PostgreSQL (Supabase), Prisma ORM |
+| Payments | Stripe (subscriptions, Checkout, Customer Portal, webhooks) |
+| Forms & validation | React Hook Form, Zod |
+| Charts & dates | Recharts, date-fns |
+| State / UI | Zustand (toasts), next-themes (dark mode), Lucide icons |
+| Fonts | Plus Jakarta Sans (via `next/font`) |
 
 ---
 
-## Part 1 — Install Node.js + Git
+## Project structure
 
-1. **Node.js**: https://nodejs.org → click **LTS** → run installer → Next → Next
-   → Install → Finish. Check: `node -v` shows a version.
-2. **Git**: https://git-scm.com/download/win → run installer → Next → Install →
-   Finish. Reopen the terminal, check: `git --version`.
+```text
+prisma/
+  schema.prisma          # Data models + enums (User, Project, Task, RFI, …)
+  seed.ts                # Demo account (pre-subscribed) + sample data
 
----
+src/
+  app/
+    page.tsx             # Public landing page
+    pricing/  about/     # Public marketing pages
+    login/  signup/      # Authentication screens
+    billing/             # Subscribe / manage plan (login required, no sub yet)
+    (app)/               # Signed-in, subscription-gated application
+      dashboard/         #   Overview + charts
+      projects/          #   List, new, [id] detail, workflow sub-pages, print
+      contacts/  rfis/  calendar/  settings/
+    admin/               # Separate admin console (its own login)
+    api/
+      auth/[...nextauth] #   Auth.js route
+      stripe/webhook     #   Stripe events → database
+      projects/[id]/export  # CSV export
 
-## Part 2 — Create your Supabase database
+  components/
+    ui/                  # Primitives: button, card, dialog, toast, skeleton…
+    layout/              # Sidebar, topbar, mobile nav
+    …                    # Task table, kanban, calendar, panels, charts, forms
 
-1. Go to **https://supabase.com** → **Start your project** → sign in (GitHub is
-   easiest).
-2. Click **New project**. Give it a name (`greenlight`), and **set a database
-   password** — write this password down, you'll need it. Pick a region close to
-   you (e.g. Sydney) → **Create new project**. Wait ~1 minute for it to finish.
-3. At the top of the project, click the **Connect** button.
-4. Choose the **ORMs** tab (or "Prisma"). You'll see two lines — `DATABASE_URL`
-   and `DIRECT_URL`. They look like:
+  lib/
+    workflow-templates.ts# Default tasks for every new project
+    project-setup.ts     # Materialises templates into a project
+    actions.ts           # Ownership-guarded server actions (mutations)
+    queries.ts           # Dashboard + notification aggregations
+    auth.ts / auth.config.ts / session.ts   # Authentication
+    billing.ts / billing-actions.ts / stripe.ts  # Payments
+    admin-auth.ts / admin-actions.ts / admin-data.ts  # Admin console
+    business.ts / dates.ts / constants.ts    # Domain logic & labels
 
-   ```
-   DATABASE_URL="postgresql://postgres.abcdefgh:[YOUR-PASSWORD]@aws-0-ap-southeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
-   DIRECT_URL="postgresql://postgres.abcdefgh:[YOUR-PASSWORD]@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres"
-   ```
-
-5. **Copy both.** Replace `[YOUR-PASSWORD]` with the database password from step 2.
-   Keep them handy for Part 4.
-
-✅ You now have a scalable Postgres database.
-
----
-
-## Part 3 — Set up Stripe (the A$200 plan)
-
-Stripe handles the payments. We'll work in **Test mode** first (fake money), and
-switch to real money in Part 10.
-
-1. Go to **https://stripe.com** → **Sign up** / **Sign in**.
-2. Make sure the **Test mode** toggle (top-right) is **ON**.
-
-### 3a. Create the product & price
-
-1. Left menu → **Product catalog** → **+ Add product**.
-2. Name: **Greenlight Pro**.
-3. Under **Pricing**: Recurring · **Monthly** · Amount **200** · Currency **AUD**.
-4. Click **Save**.
-5. Open the product, find the **price** you just created, and copy its **Price ID**
-   (starts with `price_...`). Save it for Part 4.
-
-### 3b. Get your secret API key
-
-1. Left menu → **Developers → API keys**.
-2. Copy the **Secret key** (starts with `sk_test_...`). Save it for Part 4.
-
-> You'll set up the **webhook secret** in Part 6 (local) and Part 9 (production).
+middleware.ts            # Route protection
+```
 
 ---
 
-## Part 4 — Put your keys into the project
+## Getting started
 
-1. Create your settings file:
+### Prerequisites
 
-   ```powershell
-   Copy-Item .env.example .env
-   ```
+- **Node.js 18.18+**
+- A **PostgreSQL database** — the project is set up for [Supabase](https://supabase.com)
+  (any Postgres works)
+- A **Stripe** account (test mode is fine for development)
 
-2. Generate a login-security secret and **copy the printed line**:
+### 1. Install
 
-   ```powershell
-   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
-   ```
-
-3. Open the settings file:
-
-   ```powershell
-   notepad .env
-   ```
-
-4. Fill in these values (leave `STRIPE_WEBHOOK_SECRET` as-is for now):
-
-   ```
-   DATABASE_URL="...your Supabase pooler string (port 6543, ends with pgbouncer=true)..."
-   DIRECT_URL="...your Supabase session string (port 5432)..."
-   AUTH_SECRET="...the secret you generated in step 2..."
-   STRIPE_SECRET_KEY="sk_test_...your Stripe secret key..."
-   STRIPE_PRICE_ID="price_...your Greenlight Pro price id..."
-   STRIPE_WEBHOOK_SECRET="whsec_xxx"
-   NEXT_PUBLIC_APP_URL="http://localhost:3000"
-   ```
-
-5. **Save and close** Notepad.
-
----
-
-## Part 5 — Install, create tables, add demo data
-
-Run these one at a time:
-
-```powershell
+```bash
 npm install
-npx prisma migrate dev --name init
+```
+
+### 2. Configure environment
+
+Copy the example file and fill in the values (see
+[Environment variables](#environment-variables)):
+
+```bash
+cp .env.example .env
+```
+
+### 3. Set up the database
+
+Create the schema and load demo data:
+
+```bash
+npx prisma migrate dev --name init   # or: npm run db:push
 npm run db:seed
 ```
 
-- ✅ `migrate` prints `Your database is now in sync with your schema.`
-- ✅ `db:seed` prints a demo login: **`demo@greenlight.app`** / **`demo12345`**
-  (this demo account is pre-subscribed, so it skips payment).
+The seed creates a **pre-subscribed demo account** so the paywall can be bypassed
+in development:
 
----
+```text
+Email:    demo@greenlight.app
+Password: demo12345
+```
 
-## Part 6 — Run locally & test a real (test-mode) payment
+### 4. Run
 
-Payments rely on a **webhook** — a message Stripe sends your app when a payment
-succeeds. Locally we use the free **Stripe CLI** to forward those messages.
-
-### 6a. Install & connect the Stripe CLI
-
-1. Download the Stripe CLI for Windows from
-   **https://github.com/stripe/stripe-cli/releases/latest** (the `..._windows_x86_64.zip`).
-   Unzip it and note where `stripe.exe` is.
-2. In a **new** terminal, log the CLI in to your Stripe account:
-
-   ```powershell
-   stripe login
-   ```
-
-   (If `stripe` isn't recognised, run it from the folder where `stripe.exe` is,
-   e.g. `.\stripe.exe login`.) Approve in the browser.
-
-3. Start forwarding webhooks to your app (keep this terminal open):
-
-   ```powershell
-   stripe listen --forward-to localhost:3000/api/stripe/webhook
-   ```
-
-   It prints a line like `Ready! ... webhook signing secret is whsec_abc123...`.
-   **Copy that `whsec_...` value**, paste it into `.env` as
-   `STRIPE_WEBHOOK_SECRET`, and save.
-
-### 6b. Start the app
-
-In your **first** terminal:
-
-```powershell
+```bash
 npm run dev
 ```
 
-### 6c. Try the whole flow
-
-1. Open **http://localhost:3000** → click **Get started** → create a new account
-   (any email + an 8+ character password).
-2. You'll land on the **billing page** (a new account has no subscription yet).
-3. Click **Subscribe — A$200/month**. You'll be sent to Stripe's secure checkout.
-4. Pay with the **test card**: number **4242 4242 4242 4242**, any future expiry
-   (e.g. `12/34`), any CVC (e.g. `123`), any postcode.
-5. Stripe sends you back, the webhook activates your subscription, and you land
-   on the **dashboard**. 🎉
-
-✅ You just tested the full paid sign-up. To stop: **Ctrl + C** in each terminal.
+The app runs at `http://localhost:3000`. (For the full Stripe subscription flow
+locally, run `stripe listen --forward-to localhost:3000/api/stripe/webhook` and
+put the printed signing secret in `STRIPE_WEBHOOK_SECRET`.)
 
 ---
 
-## Part 7 — Put your code on GitHub
+## Environment variables
 
-1. **https://github.com** → sign up / log in → **+** → **New repository** →
-   name `greenlight` → **don't** add a README → **Create repository**.
-2. Tell Git who you are (first time only):
-
-   ```powershell
-   git config --global user.name "Your Name"
-   git config --global user.email "you@example.com"
-   ```
-
-3. Upload (replace `YOUR-USERNAME` in the 5th line):
-
-   ```powershell
-   git init
-   git add .
-   git commit -m "Greenlight"
-   git branch -M main
-   git remote add origin https://github.com/YOUR-USERNAME/greenlight.git
-   git push -u origin main
-   ```
-
-   Approve the browser sign-in if it appears.
-
-> 🔒 Your `.env` (all your secret keys) is **not** uploaded — that's on purpose.
-> You'll add the keys to Vercel privately next.
-
----
-
-## Part 8 — Deploy to Vercel
-
-1. **https://vercel.com** → **Sign Up** → **Continue with GitHub** → **Authorize**.
-2. **Add New… → Project** → find **`greenlight`** → **Import**.
-3. Open **Environment Variables** and add each of these (Name → Value), using the
-   values from your `.env`:
-
-   | Name | Value |
-   | --- | --- |
-   | `DATABASE_URL` | Supabase pooler string (port 6543) |
-   | `DIRECT_URL` | Supabase session string (port 5432) |
-   | `AUTH_SECRET` | your generated secret |
-   | `STRIPE_SECRET_KEY` | `sk_test_...` |
-   | `STRIPE_PRICE_ID` | `price_...` |
-   | `STRIPE_WEBHOOK_SECRET` | leave as `whsec_xxx` for now — set in Part 9 |
-   | `NEXT_PUBLIC_APP_URL` | leave blank for now — set in Part 9 |
-
-4. Click **Deploy**. Wait 1–2 minutes.
-5. You'll get a live URL like `https://greenlight-xxxx.vercel.app`. **Copy it.**
-
-> Because you already ran the migration against Supabase in Part 5, your live site
-> shares that same database — no extra database setup needed.
-
----
-
-## Part 9 — Connect the Stripe webhook in production
-
-Your live site needs its own webhook (the Stripe CLI was only for local testing).
-
-1. **Set the app URL:** in Vercel → your project → **Settings → Environment
-   Variables** → edit **`NEXT_PUBLIC_APP_URL`** to your live URL from Part 8
-   (e.g. `https://greenlight-xxxx.vercel.app`). Save.
-2. In **Stripe** (Test mode) → **Developers → Webhooks** → **Add endpoint**.
-   - **Endpoint URL:** `https://YOUR-LIVE-URL/api/stripe/webhook`
-   - **Select events:** add `checkout.session.completed`,
-     `customer.subscription.created`, `customer.subscription.updated`,
-     `customer.subscription.deleted`.
-   - Click **Add endpoint**.
-3. On the new endpoint, click **Reveal** under **Signing secret** and copy the
-   `whsec_...` value.
-4. Back in Vercel → **Environment Variables** → set **`STRIPE_WEBHOOK_SECRET`**
-   to that value. Save.
-5. **Redeploy** so the new settings take effect: Vercel → **Deployments** →
-   the latest one → **⋯ → Redeploy**.
-
-✅ Now visit your live URL, sign up, and subscribe with the test card
-(4242 4242 4242 4242). It should activate and open the dashboard.
-
----
-
-## Part 10 — Switch on real payments (go live)
-
-When you're ready to charge real money:
-
-1. In Stripe, complete **Activate account** (business & bank details).
-2. Flip Stripe to **Live mode** (top-right toggle).
-3. Re-create the **Greenlight Pro** A$200/month product **in Live mode** and copy
-   the new **live** `price_...`.
-4. Get your **live** secret key (`sk_live_...`) from **Developers → API keys**.
-5. Create a **live** webhook (Part 9, but in Live mode) and copy its `whsec_...`.
-6. In Vercel, update these env vars to the **live** values, then **Redeploy**:
-   `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`.
-
-Your customers can now sign up and pay for real. 💳
-
----
-
-## 🔁 Updating your site later
-
-```powershell
-git add .
-git commit -m "Describe what changed"
-git push
-```
-
-Vercel redeploys automatically. If a change alters the database structure, run
-once locally: `npx prisma migrate deploy`.
-
----
-
-## 🆘 Troubleshooting
-
-| You see… | Do this |
+| Variable | Purpose |
 | --- | --- |
-| `prisma migrate` can't connect | Check `DIRECT_URL` — Supabase **port 5432** string, with your real password (no brackets). |
-| App error `Can't reach database` | Check `DATABASE_URL` — Supabase **port 6543** string, must include `?pgbouncer=true`. |
-| After paying I'm stuck on the billing page | The webhook didn't reach the app. Locally: is `stripe listen` still running, and is its `whsec_` in `.env`? In production: is the Vercel `STRIPE_WEBHOOK_SECRET` correct and did you redeploy (Part 9)? |
-| Checkout says "No such price" | `STRIPE_PRICE_ID` doesn't match the mode. Test price for test keys, live price for live keys. |
-| Vercel build fails | A missing env var — confirm all of them (Part 8) and redeploy. |
-| Login says invalid password | Passwords must be 8+ characters. Or use demo `demo@greenlight.app` / `demo12345`. |
+| `DATABASE_URL` | Pooled Postgres connection (Supabase transaction pooler, port 6543, `?pgbouncer=true`) — used at runtime |
+| `DIRECT_URL` | Direct Postgres connection (port 5432) — used by `prisma migrate` |
+| `AUTH_SECRET` | Secret used to sign Auth.js sessions |
+| `STRIPE_SECRET_KEY` | Stripe API secret key (`sk_test_…` / `sk_live_…`) |
+| `STRIPE_PRICE_ID` | Price ID of the A$200/month subscription product |
+| `STRIPE_WEBHOOK_SECRET` | Signing secret for the Stripe webhook endpoint |
+| `NEXT_PUBLIC_APP_URL` | Public base URL, used to build Stripe return links |
+| `NEXT_PUBLIC_APP_NAME` | Display name (defaults to "Greenlight") |
+| `ADMIN_USERNAME` | Username for the separate admin console |
+| `ADMIN_PASSWORD` | Password for the admin console |
+| `ADMIN_SECRET` | Secret used to sign the admin session cookie |
+
+Generate the two random secrets with:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
 
 ---
 
-## 📖 How billing & access work (reference)
+## Available scripts
 
-- **Sign-up** hashes the password (bcrypt) and creates a `User`. Sessions are
-  JWTs — no session table.
-- **`middleware.ts`** redirects logged-out visitors to `/login`. Public pages:
-  landing `/`, `/pricing`, `/login`, `/signup`.
-- **The app is subscription-gated:** `src/app/(app)/layout.tsx` checks the user's
-  Stripe status on every visit; without an active subscription you're sent to
-  `/billing`.
-- **Stripe flow:** `/billing` → `startCheckout()` (`src/lib/billing-actions.ts`)
-  → Stripe Checkout → back to the app. The webhook
-  (`src/app/api/stripe/webhook/route.ts`) writes the subscription status onto the
-  `User`. `src/lib/billing.ts` decides if it's active. "Manage billing" opens the
-  Stripe Customer Portal.
-- **Multi-tenant:** every Project/Contact/Council/Setting has an `ownerId`; all
-  reads and writes are scoped to the signed-in user.
+| Script | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Generate the Prisma client and build for production |
+| `npm run start` | Run the production build |
+| `npm run lint` | Lint with ESLint |
+| `npm run db:migrate` | Create and apply a Prisma migration (dev) |
+| `npm run db:push` | Push the schema without a migration |
+| `npm run db:seed` | Seed the demo account and sample data |
+| `npm run db:studio` | Open Prisma Studio (database GUI) |
+| `npm run db:reset` | Drop, re-migrate and re-seed the database |
 
-## Project structure (key files)
+---
 
-```
-prisma/schema.prisma        # Models (User has Stripe fields) + enums
-prisma/seed.ts              # Demo account (pre-subscribed) + sample data
-src/app/
-  page.tsx  pricing/  login/  signup/   # public
-  billing/                              # subscribe / manage (login required)
-  (app)/                                # the gated app (needs a subscription)
-  api/stripe/webhook/                   # Stripe events → DB
-  api/auth/[...nextauth]/               # Auth.js
-src/lib/
-  stripe.ts  billing.ts  billing-actions.ts   # payments
-  auth.ts  auth.config.ts  session.ts          # authentication
-  actions.ts                                   # ownership-guarded mutations
-  workflow-templates.ts                        # default project tasks
-middleware.ts               # route protection
-```
+## Deployment
+
+The application deploys cleanly to **Vercel**:
+
+1. Push the repository to GitHub and import it into Vercel.
+2. Add all of the [environment variables](#environment-variables) in the project
+   settings (using live Stripe keys and a production `NEXT_PUBLIC_APP_URL` for a
+   real launch).
+3. Run the migration against the production database once
+   (`prisma migrate deploy`), then deploy.
+4. Create a **production Stripe webhook** pointing at
+   `https://<your-domain>/api/stripe/webhook` and subscribe to
+   `checkout.session.completed` and the `customer.subscription.*` events; put its
+   signing secret in `STRIPE_WEBHOOK_SECRET` and redeploy.
+
+The `build` script runs `prisma generate` automatically.
+
+---
+
+## The admin console
+
+Greenlight ships with a small **admin console** at `/admin`, protected by its own
+credentials (`ADMIN_USERNAME` / `ADMIN_PASSWORD`) — completely separate from user
+accounts. It surfaces platform-wide metrics: total users, active subscribers,
+total projects and tasks, open RFIs, overdue tasks, new sign-ups, a
+projects-by-status breakdown and a per-account table (identity + counts).
+
+By design it shows **only aggregate, account-level information** — it never
+exposes any user's project names, addresses, client details, tasks, notes or
+documents.
+
+---
+
+## Security & privacy
+
+- Passwords are hashed with **bcrypt**; sessions are stateless JWTs.
+- Every database read and write is **scoped to the authenticated owner**; server
+  actions verify ownership before mutating.
+- Route protection is enforced in `middleware.ts`, and the authenticated area is
+  additionally gated on an active Stripe subscription.
+- The admin area uses a separate, signed-cookie authentication and only ever
+  reads aggregate data.
+- Secrets live in environment variables and are never committed (`.env` is
+  git-ignored).
+
+---
+
+## Glossary of SA approval terms
+
+| Term | Meaning |
+| --- | --- |
+| **PlanSA** | South Australia's online planning and development portal |
+| **Planning Approval** | Consent that a proposed development is appropriate for the site |
+| **BRC** | Building Rules Consent — confirms compliance with building rules |
+| **Development Approval** | The combined planning + building consent to proceed |
+| **Land Division** | Subdividing land into separate titles |
+| **RFI** | Request for Information raised by a council or certifier |
+| **CITB** | Construction Industry Training Board levy, payable on building work |
+| **SCAP** | State Commission Assessment Panel (land-division assessment) |
+| **SA Water** | The state water utility, involved in land-division servicing |
+| **S&D** | Site & Drainage plan |
+| **Take-off** | A materials/quantities estimate from working drawings |
+
+---
+
+## Roadmap ideas
+
+The codebase is intentionally easy to extend. Natural next steps include:
+
+- **Real file uploads** — `Document.fileUrl` is currently a placeholder; wire it
+  to Supabase Storage, S3 or Vercel Blob.
+- **Email reminders** — the overdue/upcoming data already exists; add a scheduled
+  job to notify owners.
+- **Teams / organisations** — extend the `ownerId` model to a shared workspace.
+- **Free trials, annual pricing, or multiple plans** in Stripe.
+- **PlanSA integration** — the reference-number fields are ready to sync.
+
+---
+
+## License
+
+This repository does not currently include an open-source license, so all rights
+are reserved by the author by default. To make it reusable, add a `LICENSE` file
+(for example, the MIT License).
+
+---
+
+_Built with Next.js, Prisma, Supabase and Stripe._
