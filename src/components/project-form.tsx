@@ -129,23 +129,6 @@ export function ProjectForm({ councils, defaultValues, action, submitLabel = "Cr
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Responsible stakeholder</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Field label="Stakeholder name">
-            <Input {...register("stakeholderName")} placeholder="e.g. Jane Smith" />
-          </Field>
-          <Field label="Role / title">
-            <Input {...register("stakeholderRole")} placeholder="e.g. Project Lead, Developer" />
-          </Field>
-          <Field label="Contact (phone or email)" className="sm:col-span-2">
-            <Input {...register("stakeholderContact")} placeholder="Phone or email" />
-          </Field>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
           <CardTitle className="text-base">Dwelling details</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-4 sm:grid-cols-3">

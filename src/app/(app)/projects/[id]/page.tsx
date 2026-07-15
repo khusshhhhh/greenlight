@@ -10,6 +10,7 @@ import { ProjectSummaryCard } from "@/components/project-summary-card";
 import { ProgressSummary } from "@/components/progress-summary";
 import { MissingDocsPanel } from "@/components/missing-docs-panel";
 import { ContactAssignmentPanel } from "@/components/contact-assignment-panel";
+import { ResponsibleEntitiesPanel } from "@/components/responsible-entities-panel";
 import { WorkflowTimeline } from "@/components/workflow-timeline";
 import { TaskTable } from "@/components/task-table";
 import { RfiPanel } from "@/components/rfi-panel";
@@ -124,6 +125,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
             tasksByWorkflow={byWorkflow.map((w) => ({ type: w.type, tasks: w.tasks }))}
           />
           <MissingDocsPanel tasks={tasks} />
+          <ResponsibleEntitiesPanel projectId={project.id} entities={project.entities} />
           <ContactAssignmentPanel
             projectId={project.id}
             assigned={project.projectContacts}

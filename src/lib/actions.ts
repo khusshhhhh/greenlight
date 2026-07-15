@@ -108,9 +108,6 @@ export async function createProject(fd: FormData) {
       startDate,
       targetDate: date(fd, "targetDate"),
       notes: str(fd, "notes"),
-      stakeholderName: str(fd, "stakeholderName"),
-      stakeholderRole: str(fd, "stakeholderRole"),
-      stakeholderContact: str(fd, "stakeholderContact"),
       storeys: str(fd, "storeys"),
       bedrooms: num(fd, "bedrooms"),
       bathrooms: num(fd, "bathrooms"),
@@ -148,9 +145,6 @@ export async function updateProject(projectId: string, fd: FormData) {
       startDate: date(fd, "startDate"),
       targetDate: date(fd, "targetDate"),
       notes: str(fd, "notes"),
-      stakeholderName: str(fd, "stakeholderName"),
-      stakeholderRole: str(fd, "stakeholderRole"),
-      stakeholderContact: str(fd, "stakeholderContact"),
       storeys: str(fd, "storeys"),
       bedrooms: num(fd, "bedrooms"),
       bathrooms: num(fd, "bathrooms"),
@@ -411,6 +405,41 @@ export async function unassignContact(projectContactId: string, projectId: strin
   const userId = await requireUserId();
   await assertProjectOwner(projectId, userId);
   await prisma.projectContact.deleteMany({ where: { id: projectContactId, projectId } });
+  revalidatePath(`/projects/${projectId}`);
+}
+
+// ---------------------------------------------------------------------------
+// Responsible entities
+// ---------------------------------------------------------------------------
+
+export async function addProjectEntity(projectId: string, fd: FormData) {
+  const userId = await requireUserId();
+  await assertProjectOwner(projectId, userId);
+
+  // "Other" lets the user supply a custom type label.
+  const selected = str(fd, "type");
+  const custom = str(fd, "customType");
+  const type = (selected === "Other" ? custom : selected) ?? "Other";
+  const name = str(fd, "name");
+  if (!name) throw new Error("Entity name is required");
+
+  await prisma.projectEntity.create({
+    data: {
+      projectId,
+      type,
+      name,
+      contact: str(fd, "contact"),
+      notes: str(fd, "notes"),
+    },
+  });
+  await logActivity({ projectId, action: "Responsible entity added", newValue: `${type}: ${name}` });
+  revalidatePath(`/projects/${projectId}`);
+}
+
+export async function removeProjectEntity(entityId: string, projectId: string) {
+  const userId = await requireUserId();
+  await assertProjectOwner(projectId, userId);
+  await prisma.projectEntity.deleteMany({ where: { id: entityId, projectId } });
   revalidatePath(`/projects/${projectId}`);
 }
 

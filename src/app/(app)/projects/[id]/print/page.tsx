@@ -51,6 +51,30 @@ export default async function PrintPage({ params }: { params: { id: string } }) 
         <div>Assigned: <strong>{project.assignee?.name ?? "—"}</strong></div>
       </section>
 
+      {project.entities.length > 0 && (
+        <section className="print-break mb-6">
+          <h2 className="mb-2 text-lg font-semibold">Responsible entities</h2>
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b text-left">
+                <th className="py-1 pr-2">Type</th>
+                <th className="py-1 pr-2">Name</th>
+                <th className="py-1 pr-2">Contact</th>
+              </tr>
+            </thead>
+            <tbody>
+              {project.entities.map((ent) => (
+                <tr key={ent.id} className="border-b border-slate-100">
+                  <td className="py-1 pr-2">{ent.type}</td>
+                  <td className="py-1 pr-2">{ent.name}</td>
+                  <td className="py-1 pr-2">{ent.contact ?? "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
+
       {byWorkflow.map((wf) => (
         <section key={wf.type} className="print-break mb-6">
           <h2 className="mb-2 text-lg font-semibold">{WORKFLOW_LABEL[wf.type]}</h2>

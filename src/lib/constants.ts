@@ -239,6 +239,21 @@ export const SA_COUNCILS: string[] = [
   "Mount Barker District Council",
 ];
 
+// Responsible-entity types for a project (last option "Other" allows a custom label).
+export const RESPONSIBLE_ENTITY_TYPES: string[] = [
+  "Architect",
+  "Surveyor",
+  "Engineer",
+  "Timber Company",
+  "Take-off Company",
+  "Certifier",
+  "Land Division",
+  "Builder",
+  "Draftsperson",
+  "Council Contact",
+  "Other",
+];
+
 export const enumOptions = <T extends string>(
   record: Record<T, string>
 ): { value: T; label: string }[] =>

@@ -17,7 +17,6 @@ import {
   Sofa,
   Car,
   Building,
-  UserCheck,
 } from "lucide-react";
 import type { Project, User as UserModel } from "@prisma/client";
 
@@ -57,18 +56,6 @@ export function ProjectSummaryCard({
           <Row icon={Calendar} label="Start date" value={fmtDate(project.startDate)} />
           <Row icon={Calendar} label="Target completion" value={fmtDate(project.targetDate)} />
           <Row icon={UserCog} label="Assigned staff" value={project.assignee?.name} />
-          <Row
-            icon={UserCheck}
-            label="Responsible stakeholder"
-            value={
-              project.stakeholderName
-                ? [project.stakeholderName, project.stakeholderRole]
-                    .filter(Boolean)
-                    .join(" · ")
-                : null
-            }
-          />
-          <Row icon={Phone} label="Stakeholder contact" value={project.stakeholderContact} />
         </div>
 
         <DwellingDetails project={project} />

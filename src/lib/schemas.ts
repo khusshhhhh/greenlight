@@ -15,11 +15,6 @@ export const projectSchema = z.object({
   targetDate: z.string().optional(),
   notes: z.string().optional(),
 
-  // Responsible stakeholder
-  stakeholderName: z.string().optional(),
-  stakeholderRole: z.string().optional(),
-  stakeholderContact: z.string().optional(),
-
   // Dwelling details (kept as strings from the form inputs)
   storeys: z.string().optional(),
   bedrooms: z.string().optional(),

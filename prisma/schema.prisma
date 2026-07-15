@@ -156,11 +156,6 @@ model Project {
   targetDate       DateTime?
   notes            String?
 
-  // Responsible stakeholder for this project
-  stakeholderName    String?
-  stakeholderRole    String?
-  stakeholderContact String?
-
   // Dwelling details
   storeys     String? // "Single" | "Double"
   bedrooms    Int?
@@ -185,10 +180,27 @@ model Project {
   notes_list       Note[]
   activities       ActivityLog[]
   projectContacts  ProjectContact[]
+  entities         ProjectEntity[]
 
   @@index([ownerId])
   @@index([status])
   @@index([council])
+}
+
+/// A responsible entity assigned to a project (Architect, Surveyor, Engineer,
+/// Timber/Take-off company, Certifier, Land Division company, or a custom type).
+model ProjectEntity {
+  id        String   @id @default(cuid())
+  projectId String
+  type      String // e.g. "Architect", "Surveyor" or a custom label
+  name      String // company / person name
+  contact   String? // phone or email
+  notes     String?
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
 }
 
 model Contact {

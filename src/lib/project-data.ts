@@ -17,6 +17,7 @@ export async function getProjectDetail(id: string, userId: string) {
       notes_list: { orderBy: { createdAt: "desc" } },
       activities: { orderBy: { createdAt: "desc" }, take: 40 },
       workflows: { orderBy: { type: "asc" } },
+      entities: { orderBy: { createdAt: "asc" } },
     },
   });
   if (!project) return null;
