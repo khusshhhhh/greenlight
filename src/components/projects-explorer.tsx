@@ -22,7 +22,7 @@ const SORTS: { value: SortKey; label: string }[] = [
 ];
 
 const nativeSelect =
-  "h-10 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "h-10 w-full min-w-0 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-auto";
 
 export function ProjectsExplorer({
   projects,
@@ -122,11 +122,16 @@ export function ProjectsExplorer({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+          <span className="col-span-2 hidden items-center gap-1.5 text-xs font-medium text-muted-foreground sm:flex">
             <SlidersHorizontal className="h-3.5 w-3.5" /> Filter
           </span>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className={nativeSelect}>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className={nativeSelect}
+            aria-label="Filter by status"
+          >
             <option value="">All statuses</option>
             {enumOptions<ProjectStatus>(PROJECT_STATUS_LABEL).map((o) => (
               <option key={o.value} value={o.value}>
@@ -134,7 +139,12 @@ export function ProjectsExplorer({
               </option>
             ))}
           </select>
-          <select value={council} onChange={(e) => setCouncil(e.target.value)} className={nativeSelect}>
+          <select
+            value={council}
+            onChange={(e) => setCouncil(e.target.value)}
+            className={nativeSelect}
+            aria-label="Filter by council"
+          >
             <option value="">All councils</option>
             {councils.map((c) => (
               <option key={c} value={c}>
@@ -142,26 +152,28 @@ export function ProjectsExplorer({
               </option>
             ))}
           </select>
-          <select value={flag} onChange={(e) => setFlag(e.target.value)} className={nativeSelect}>
+          <select
+            value={flag}
+            onChange={(e) => setFlag(e.target.value)}
+            className={nativeSelect}
+            aria-label="Filter by flag"
+          >
             <option value="">No flag</option>
             <option value="overdue">Has overdue</option>
             <option value="rfi">Open RFI</option>
           </select>
-
-          <div className="ml-auto flex items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground">Sort</span>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as SortKey)}
-              className={nativeSelect}
-            >
-              {SORTS.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortKey)}
+            className={cn(nativeSelect, "sm:ml-auto")}
+            aria-label="Sort projects"
+          >
+            {SORTS.map((s) => (
+              <option key={s.value} value={s.value}>
+                Sort: {s.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">

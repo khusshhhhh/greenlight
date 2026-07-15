@@ -66,7 +66,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
         {/* Main column */}
         <div className="min-w-0">
           <Tabs defaultValue="overview">
-            <TabsList className="flex h-auto w-full flex-wrap justify-start">
+            <TabsList className="w-full max-w-full justify-start overflow-x-auto no-scrollbar">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="planning">Planning</TabsTrigger>
               <TabsTrigger value="development">BRC</TabsTrigger>

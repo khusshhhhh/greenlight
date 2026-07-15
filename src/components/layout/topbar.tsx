@@ -43,7 +43,7 @@ export function Topbar({
       <MobileNav />
 
       <form
-        className="relative w-full max-w-xs sm:max-w-sm"
+        className="relative min-w-0 flex-1 sm:max-w-sm"
         onSubmit={(e) => {
           e.preventDefault();
           const q = new FormData(e.currentTarget).get("q")?.toString().trim();
@@ -54,7 +54,7 @@ export function Topbar({
         <Input name="q" placeholder="Search projects…" className="pl-9" />
       </form>
 
-      <div className="ml-auto flex items-center gap-1 sm:gap-2">
+      <div className="flex shrink-0 items-center gap-1 sm:gap-2">
         <NotificationPanel notifications={notifications} enabled={notificationsEnabled} />
         <ThemeToggle />
         <Button asChild size="sm">

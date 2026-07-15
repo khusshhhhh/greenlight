@@ -82,9 +82,16 @@
   * {
     @apply border-border;
   }
+  html {
+    /* `clip` prevents off-canvas drawers (mobile nav, notification panel) from
+       creating a phantom horizontal scrollbar, without breaking sticky/fixed. */
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: clip;
+    max-width: 100vw;
   }
 }
 
