@@ -67,7 +67,7 @@ export default async function AboutPage() {
       <section id="mission" className="border-t bg-muted/20 py-20">
         <Reveal className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-2">
           <div>
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500 text-white">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500 text-white">
               <Target className="h-5 w-5" />
             </div>
             <h2 className="text-3xl font-bold tracking-tight">Our goal</h2>
@@ -87,7 +87,7 @@ export default async function AboutPage() {
           <div className="grid grid-cols-2 gap-4">
             {STATS.map((s) => (
               <div key={s.label} className="gl-hover-lift rounded-xl border bg-card p-6">
-                <p className="text-3xl font-bold tracking-tight text-emerald-500">
+                <p className="text-3xl font-bold tracking-tight text-teal-500">
                   <CountUp value={s.value} suffix={s.suffix} />
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">{s.label}</p>
@@ -101,7 +101,7 @@ export default async function AboutPage() {
       <section id="process" className="py-20">
         <Reveal className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="text-center">
-            <span className="text-sm font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+            <span className="text-sm font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
               The process
             </span>
             <h2 className="mt-2 text-3xl font-bold tracking-tight">
@@ -118,7 +118,7 @@ export default async function AboutPage() {
               const Icon = p.icon;
               return (
                 <div key={p.title} className="gl-hover-lift flex gap-5 rounded-2xl border bg-card p-6">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-100 text-teal-700 dark:bg-teal-500/15 dark:text-teal-300">
                     <Icon className="h-6 w-6" />
                   </div>
                   <div>
@@ -141,7 +141,7 @@ export default async function AboutPage() {
               const Icon = v.icon;
               return (
                 <div key={v.title} className="gl-hover-lift rounded-xl border bg-card p-6">
-                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-teal-700 dark:bg-teal-500/15 dark:text-teal-300">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-semibold">{v.title}</h3>

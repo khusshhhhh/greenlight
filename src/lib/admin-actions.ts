@@ -8,6 +8,7 @@ import {
   checkAdminCredentials,
   makeAdminToken,
 } from "./admin-auth";
+import { checkRateLimit } from "./rate-limit";
 
 export type AdminAuthState = { error?: string } | undefined;
 
@@ -17,6 +18,12 @@ export async function adminLogin(
 ): Promise<AdminAuthState> {
   const username = String(fd.get("username") ?? "");
   const password = String(fd.get("password") ?? "");
+
+  // Throttle admin login attempts (5 per minute).
+  const rl = checkRateLimit("admin-login", 5, 60_000);
+  if (!rl.ok) {
+    return { error: "Too many attempts. Please wait a minute and try again." };
+  }
 
   if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
     return { error: "Admin access is not configured on the server." };

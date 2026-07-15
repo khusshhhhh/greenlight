@@ -6,8 +6,8 @@ import { prisma } from "./prisma";
 import { authConfig } from "./auth.config";
 
 const credentialsSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
+  email: z.string().email().max(254),
+  password: z.string().min(1).max(200),
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({

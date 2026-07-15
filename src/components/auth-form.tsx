@@ -25,7 +25,7 @@ function PasswordField({ mode }: { mode: "login" | "signup" }) {
           autoComplete={mode === "login" ? "current-password" : "new-password"}
           required
           className="pr-10"
-          placeholder={mode === "signup" ? "At least 8 characters" : "••••••••"}
+          placeholder={mode === "signup" ? "8+ chars, incl. a letter & number" : "••••••••"}
         />
         <button
           type="button"

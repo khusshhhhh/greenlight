@@ -3,78 +3,82 @@
 @tailwind utilities;
 
 @layer base {
+  /* ---------------------------------------------------------------------
+     Unique "Deep Teal" palette. Primary = teal (brand). Semantic status
+     colours (success/warning/destructive) stay distinct for meaning.
+  --------------------------------------------------------------------- */
   :root {
-    --background: 150 33% 98%;
-    --foreground: 155 30% 12%;
+    --background: 190 40% 98%;
+    --foreground: 200 40% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 155 30% 12%;
+    --card-foreground: 200 40% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 155 30% 12%;
+    --popover-foreground: 200 40% 11%;
 
-    --primary: 152 55% 30%;
-    --primary-foreground: 150 40% 98%;
+    --primary: 186 74% 28%;
+    --primary-foreground: 185 60% 98%;
 
-    --secondary: 150 32% 94%;
-    --secondary-foreground: 152 42% 22%;
+    --secondary: 190 34% 93%;
+    --secondary-foreground: 192 48% 20%;
 
-    --muted: 150 25% 95%;
-    --muted-foreground: 155 14% 40%;
+    --muted: 190 28% 94%;
+    --muted-foreground: 200 14% 40%;
 
-    --accent: 150 42% 91%;
-    --accent-foreground: 152 45% 22%;
+    --accent: 187 46% 89%;
+    --accent-foreground: 192 52% 20%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 351 74% 48%;
     --destructive-foreground: 0 0% 98%;
 
     --success: 152 62% 34%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
+    --warning: 33 92% 48%;
     --warning-foreground: 40 45% 12%;
 
-    --border: 150 22% 87%;
-    --input: 150 22% 87%;
-    --ring: 152 55% 34%;
+    --border: 190 26% 86%;
+    --input: 190 26% 86%;
+    --ring: 186 74% 32%;
 
     --radius: 0.75rem;
   }
 
   .dark {
-    --background: 158 30% 7%;
-    --foreground: 150 22% 96%;
+    --background: 200 42% 6%;
+    --foreground: 185 24% 96%;
 
-    --card: 158 26% 10%;
-    --card-foreground: 150 22% 96%;
+    --card: 199 36% 9%;
+    --card-foreground: 185 24% 96%;
 
-    --popover: 158 26% 10%;
-    --popover-foreground: 150 22% 96%;
+    --popover: 199 36% 9%;
+    --popover-foreground: 185 24% 96%;
 
-    --primary: 152 52% 44%;
-    --primary-foreground: 155 45% 8%;
+    --primary: 184 68% 42%;
+    --primary-foreground: 197 60% 7%;
 
-    --secondary: 156 20% 16%;
-    --secondary-foreground: 150 22% 96%;
+    --secondary: 198 26% 15%;
+    --secondary-foreground: 185 24% 96%;
 
-    --muted: 156 20% 16%;
-    --muted-foreground: 150 15% 64%;
+    --muted: 198 26% 15%;
+    --muted-foreground: 190 16% 64%;
 
-    --accent: 156 24% 20%;
-    --accent-foreground: 150 22% 96%;
+    --accent: 195 30% 19%;
+    --accent-foreground: 185 24% 96%;
 
-    --destructive: 0 63% 45%;
+    --destructive: 351 66% 50%;
     --destructive-foreground: 0 0% 98%;
 
     --success: 152 55% 46%;
-    --success-foreground: 155 45% 8%;
+    --success-foreground: 197 60% 7%;
 
-    --warning: 38 92% 55%;
+    --warning: 33 92% 54%;
     --warning-foreground: 40 45% 10%;
 
-    --border: 156 20% 19%;
-    --input: 156 20% 22%;
-    --ring: 152 52% 52%;
+    --border: 198 26% 18%;
+    --input: 198 26% 21%;
+    --ring: 184 68% 52%;
   }
 }
 

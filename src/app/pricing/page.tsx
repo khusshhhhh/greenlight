@@ -47,10 +47,10 @@ export default async function PricingPage() {
         </div>
 
         <div className="mx-auto mt-14 max-w-md">
-          <div className="gl-rise gl-hover-lift rounded-2xl border-2 border-emerald-500/40 bg-card p-8 shadow-lg">
+          <div className="gl-rise gl-hover-lift rounded-2xl border-2 border-teal-500/40 bg-card p-8 shadow-lg">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">{PLAN.name}</h2>
-              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+              <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-medium text-teal-700 dark:bg-teal-500/15 dark:text-teal-300">
                 Everything included
               </span>
             </div>
@@ -72,7 +72,7 @@ export default async function PricingPage() {
             <ul className="mt-8 space-y-3">
               {PLAN.features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5 text-sm">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-teal-500" />
                   {f}
                 </li>
               ))}

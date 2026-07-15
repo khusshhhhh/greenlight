@@ -60,16 +60,16 @@ export default async function LandingPage() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-4 pb-8 pt-20 text-center sm:px-6 sm:pt-24">
         <div className="gl-rise mx-auto mb-5 inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          <span className="h-2 w-2 rounded-full bg-teal-500" />
           Built for South Australian residential development
         </div>
         <h1 className="gl-rise mx-auto max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl" style={{ animationDelay: "0.05s" }}>
-          Get every approval <span className="text-emerald-500">greenlit</span> — on time.
+          Get every approval <span className="text-teal-500">greenlit</span> — on time.
         </h1>
         <p className="gl-rise mt-4 text-lg font-medium sm:text-xl" style={{ animationDelay: "0.08s" }}>
           <span className="text-muted-foreground">We track </span>
           <Typewriter
-            className="text-emerald-500 font-semibold"
+            className="text-teal-500 font-semibold"
             words={[
               "Planning Approval",
               "Development / BRC",
@@ -103,7 +103,7 @@ export default async function LandingPage() {
       <section id="how" className="border-t bg-muted/20 py-20">
         <Reveal className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="text-center">
-            <span className="text-sm font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+            <span className="text-sm font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
               How it works
             </span>
             <h2 className="mt-2 text-3xl font-bold tracking-tight">
@@ -121,7 +121,7 @@ export default async function LandingPage() {
                   <span className="absolute right-4 top-4 text-3xl font-bold text-muted/40">
                     {i + 1}
                   </span>
-                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-teal-700 dark:bg-teal-500/15 dark:text-teal-300">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-semibold">{s.title}</h3>
@@ -173,7 +173,7 @@ export default async function LandingPage() {
               const Icon = f.icon;
               return (
                 <div key={f.title} className="gl-hover-lift rounded-xl border bg-card p-6">
-                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-teal-700 dark:bg-teal-500/15 dark:text-teal-300">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-semibold">{f.title}</h3>
@@ -188,8 +188,8 @@ export default async function LandingPage() {
       {/* Mission band */}
       <section className="py-20">
         <Reveal className="mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="rounded-2xl border bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-10 text-center">
-            <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500 text-white">
+          <div className="rounded-2xl border bg-gradient-to-br from-teal-500/10 to-teal-500/5 p-10 text-center">
+            <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500 text-white">
               <Target className="h-5 w-5" />
             </div>
             <h2 className="text-2xl font-bold tracking-tight">Our goal</h2>

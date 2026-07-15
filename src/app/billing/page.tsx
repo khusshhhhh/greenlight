@@ -43,7 +43,7 @@ export default async function BillingPage({
 
         {sub.active ? (
           <div className="rounded-2xl border bg-card p-8 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100 text-teal-700 dark:bg-teal-500/15 dark:text-teal-300">
               <ShieldCheck className="h-6 w-6" />
             </div>
             <h1 className="text-2xl font-semibold">You&apos;re subscribed 🎉</h1>
@@ -88,7 +88,7 @@ export default async function BillingPage({
             <ul className="mx-auto max-w-sm space-y-2.5">
               {PLAN.features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5 text-sm">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-teal-500" />
                   {f}
                 </li>
               ))}

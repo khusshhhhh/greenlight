@@ -21,9 +21,9 @@ export function LogoMark({
     >
       <defs>
         <linearGradient id="gl-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#34d399" />
-          <stop offset="0.55" stopColor="#10b981" />
-          <stop offset="1" stopColor="#047857" />
+          <stop stopColor="#2dd4bf" />
+          <stop offset="0.55" stopColor="#14b8a6" />
+          <stop offset="1" stopColor="#0d9488" />
         </linearGradient>
         <linearGradient id="gl-hi" x1="20" y1="0" x2="20" y2="22" gradientUnits="userSpaceOnUse">
           <stop stopColor="#fff" stopOpacity="0.22" />

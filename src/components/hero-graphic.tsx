@@ -15,14 +15,14 @@ export function HeroGraphic() {
       {/* soft glow */}
       <div
         aria-hidden
-        className="absolute -inset-6 rounded-[2rem] bg-emerald-500/10 blur-3xl"
+        className="absolute -inset-6 rounded-[2rem] bg-teal-500/10 blur-3xl"
       />
 
       <div className="gl-float relative rounded-2xl border bg-card p-6 shadow-xl">
         <div className="mb-6 flex items-center gap-2.5">
           <LogoMark animated className="h-7 w-7" />
           <span className="text-sm font-semibold">Approval pipeline</span>
-          <span className="ml-auto rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+          <span className="ml-auto rounded-full bg-teal-100 px-2.5 py-0.5 text-xs font-medium text-teal-700 dark:bg-teal-500/15 dark:text-teal-300">
             67% complete
           </span>
         </div>
@@ -33,7 +33,7 @@ export function HeroGraphic() {
               <span
                 className={cn(
                   "absolute -left-[1.72rem] top-0.5 flex h-4 w-4 items-center justify-center rounded-full ring-4 ring-card",
-                  s.tone === "done" && "bg-emerald-500 text-white",
+                  s.tone === "done" && "bg-teal-500 text-white",
                   s.tone === "active" && "bg-amber-500",
                   s.tone === "upcoming" && "bg-slate-300 dark:bg-slate-600"
                 )}
@@ -62,7 +62,7 @@ export function HeroGraphic() {
             <span className="font-medium text-foreground">67%</span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-muted">
-            <div className="h-full w-[67%] rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400" />
+            <div className="h-full w-[67%] rounded-full bg-gradient-to-r from-teal-500 to-teal-400" />
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@ export function HeroGraphic() {
       </div>
       <div className="gl-float absolute -bottom-4 -left-4 hidden rounded-xl border bg-card px-3 py-2 shadow-lg sm:block" style={{ animationDelay: "1.1s" }}>
         <p className="text-xs text-muted-foreground">Avg approval</p>
-        <p className="text-lg font-semibold text-emerald-500">48d</p>
+        <p className="text-lg font-semibold text-teal-500">48d</p>
       </div>
     </div>
   );
