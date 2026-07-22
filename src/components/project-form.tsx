@@ -22,7 +22,7 @@ interface Props {
 
 export function ProjectForm({ councils, defaultValues, action, submitLabel = "Create project" }: Props) {
   const router = useRouter();
-  const [pending, setPending] = React.useState(false);
+  const [pending, startTransition] = React.useTransition();
   const {
     register,
     handleSubmit,
@@ -35,15 +35,12 @@ export function ProjectForm({ councils, defaultValues, action, submitLabel = "Cr
     },
   });
 
-  async function onSubmit(values: ProjectFormValues) {
-    setPending(true);
+  function onSubmit(values: ProjectFormValues) {
     const fd = new FormData();
     Object.entries(values).forEach(([k, v]) => v != null && fd.set(k, String(v)));
-    try {
+    startTransition(async () => {
       await action(fd);
-    } finally {
-      setPending(false);
-    }
+    });
   }
 
   return (
