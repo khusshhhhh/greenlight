@@ -229,23 +229,28 @@ export async function updateTask(taskId: string, fd: FormData) {
 export async function setTaskStatus(taskId: string, status: TaskStatus) {
   const userId = await requireUserId();
   const existing = await ownedTaskOr404(taskId, userId);
-  await prisma.task.update({
-    where: { id: taskId },
-    data: {
-      status,
-      completedDate:
-        ["COMPLETED", "APPROVED", "RECEIVED"].includes(status) && !existing.completedDate
-          ? new Date()
-          : existing.completedDate,
-    },
-  });
-  await logActivity({
-    projectId: existing.projectId,
-    taskId,
-    action: "Task status changed",
-    oldValue: TASK_STATUS_LABEL[existing.status],
-    newValue: TASK_STATUS_LABEL[status],
-  });
+  // The log entry only needs the pre-update `existing` values, so it doesn't
+  // have to wait on the update — run both writes concurrently instead of
+  // serializing three round-trips into one.
+  await Promise.all([
+    prisma.task.update({
+      where: { id: taskId },
+      data: {
+        status,
+        completedDate:
+          ["COMPLETED", "APPROVED", "RECEIVED"].includes(status) && !existing.completedDate
+            ? new Date()
+            : existing.completedDate,
+      },
+    }),
+    logActivity({
+      projectId: existing.projectId,
+      taskId,
+      action: "Task status changed",
+      oldValue: TASK_STATUS_LABEL[existing.status],
+      newValue: TASK_STATUS_LABEL[status],
+    }),
+  ]);
   revalidatePath(`/projects/${existing.projectId}`);
   revalidatePath("/dashboard");
 }
@@ -260,15 +265,18 @@ export async function bulkSetTaskStatus(taskIds: string[], status: TaskStatus) {
   });
   const ids = tasks.map((t) => t.id);
   if (!ids.length) return;
-  await prisma.task.updateMany({ where: { id: { in: ids } }, data: { status } });
-  for (const projectId of [...new Set(tasks.map((t) => t.projectId))]) {
-    await logActivity({
-      projectId,
-      action: "Bulk status update",
-      newValue: `${ids.length} tasks → ${TASK_STATUS_LABEL[status]}`,
-    });
-    revalidatePath(`/projects/${projectId}`);
-  }
+  const projectIds = [...new Set(tasks.map((t) => t.projectId))];
+  await Promise.all([
+    prisma.task.updateMany({ where: { id: { in: ids } }, data: { status } }),
+    ...projectIds.map((projectId) =>
+      logActivity({
+        projectId,
+        action: "Bulk status update",
+        newValue: `${ids.length} tasks → ${TASK_STATUS_LABEL[status]}`,
+      })
+    ),
+  ]);
+  for (const projectId of projectIds) revalidatePath(`/projects/${projectId}`);
   revalidatePath("/dashboard");
 }
 

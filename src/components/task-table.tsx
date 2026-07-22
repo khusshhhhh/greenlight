@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Pencil, Plus, Lock, CornerDownRight } from "lucide-react";
+import { Pencil, Plus, Lock, CornerDownRight, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -46,6 +46,7 @@ export function TaskTable({
 }) {
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
   const [editing, setEditing] = React.useState<AnyTask | null>(null);
+  const [bulkPending, startBulkTransition] = React.useTransition();
   const doneSet = React.useMemo(() => new Set(doneIds), [doneIds]);
 
   function toggle(id: string) {
@@ -56,11 +57,14 @@ export function TaskTable({
     });
   }
 
-  async function applyBulk(status: TaskStatus) {
+  function applyBulk(status: TaskStatus) {
     const n = selected.size;
-    await bulkSetTaskStatus([...selected], status);
-    setSelected(new Set());
-    toast.success(`${n} task${n === 1 ? "" : "s"} updated`);
+    startBulkTransition(() => {
+      bulkSetTaskStatus([...selected], status).then(() => {
+        setSelected(new Set());
+        toast.success(`${n} task${n === 1 ? "" : "s"} updated`);
+      });
+    });
   }
 
   return (
@@ -70,8 +74,9 @@ export function TaskTable({
           <span className="font-medium">{selected.size} selected</span>
           <span className="text-muted-foreground">Set status:</span>
           <select
-            className="h-8 rounded-md border border-input bg-background px-2 text-sm"
+            className="h-8 rounded-md border border-input bg-background px-2 text-sm disabled:cursor-wait disabled:opacity-60"
             defaultValue=""
+            disabled={bulkPending}
             onChange={(e) => {
               if (e.target.value) applyBulk(e.target.value as TaskStatus);
               e.target.value = "";
@@ -86,7 +91,8 @@ export function TaskTable({
               </option>
             ))}
           </select>
-          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>
+          {bulkPending && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+          <Button size="sm" variant="ghost" disabled={bulkPending} onClick={() => setSelected(new Set())}>
             Clear
           </Button>
         </div>
@@ -171,8 +177,10 @@ function Row({
   variation?: boolean;
 }) {
   const [pending, startTransition] = React.useTransition();
+  const [optimisticStatus, setOptimisticStatus] = React.useState<TaskStatus | null>(null);
+  const displayStatus = pending && optimisticStatus ? optimisticStatus : task.status;
   const overdueLabel = daysRemainingLabel(task.dueDate);
-  const done = isTaskDone(task.status);
+  const done = isTaskDone(displayStatus);
 
   return (
     <TableRow className={cn(locked && "opacity-60")}>
@@ -208,19 +216,33 @@ function Row({
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild disabled={pending}>
-            <button className="cursor-pointer disabled:opacity-50" aria-label="Change status">
-              <TaskStatusBadge status={task.status} tone={taskTone(task)} />
+            <button
+              className="inline-flex cursor-pointer items-center gap-1.5 disabled:cursor-wait"
+              aria-label="Change status"
+            >
+              <TaskStatusBadge
+                status={displayStatus}
+                tone={taskTone({ ...task, status: displayStatus })}
+                className={cn(pending && "opacity-70")}
+              />
+              {pending && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             {TASK_STATUS_ORDER.map((s) => (
               <DropdownMenuItem
                 key={s}
-                onSelect={() =>
+                onSelect={() => {
+                  setOptimisticStatus(s);
                   startTransition(() => {
-                    setTaskStatus(task.id, s).then(() => toast.success("Status changed"));
-                  })
-                }
+                    setTaskStatus(task.id, s)
+                      .then(() => toast.success("Status changed"))
+                      .catch(() => {
+                        setOptimisticStatus(null);
+                        toast.error("Couldn't update status");
+                      });
+                  });
+                }}
               >
                 <TaskStatusBadge status={s} />
               </DropdownMenuItem>
