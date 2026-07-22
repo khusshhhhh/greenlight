@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { prisma } from "./prisma";
 import { requireUserId } from "./session";
 import { createDefaultWorkflows } from "./project-setup";
@@ -85,7 +84,7 @@ async function ownedContactId(id: string | null, userId: string): Promise<string
 // Projects
 // ---------------------------------------------------------------------------
 
-export async function createProject(fd: FormData) {
+export async function createProject(fd: FormData): Promise<{ id: string }> {
   const userId = await requireUserId();
   const name = str(fd, "name");
   if (!name) throw new Error("Project name is required");
@@ -122,7 +121,12 @@ export async function createProject(fd: FormData) {
 
   revalidatePath("/projects");
   revalidatePath("/dashboard");
-  redirect(`/projects/${project.id}`);
+  revalidatePath(`/projects/${project.id}`);
+  // Return the new id instead of calling redirect() here — this action is
+  // invoked programmatically (not via a native <form action>), and Next only
+  // reliably auto-navigates on redirect() for that latter case. The caller
+  // does the navigation itself once this resolves.
+  return { id: project.id };
 }
 
 export async function updateProject(projectId: string, fd: FormData) {
@@ -180,7 +184,8 @@ export async function deleteProject(projectId: string) {
   await prisma.project.delete({ where: { id: projectId } });
   revalidatePath("/projects");
   revalidatePath("/dashboard");
-  redirect("/projects");
+  // No redirect() here — this is called programmatically (not via a native
+  // <form action>), so the caller navigates itself once this resolves.
 }
 
 // ---------------------------------------------------------------------------

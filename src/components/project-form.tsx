@@ -11,12 +11,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PROJECT_STATUS_LABEL, enumOptions } from "@/lib/constants";
+import { toast } from "@/components/ui/toast";
 import type { ProjectStatus } from "@prisma/client";
 
 interface Props {
   councils: string[];
   defaultValues?: Partial<ProjectFormValues>;
-  action: (fd: FormData) => Promise<void>;
+  action: (fd: FormData) => Promise<void | { id: string }>;
   submitLabel?: string;
 }
 
@@ -39,7 +40,14 @@ export function ProjectForm({ councils, defaultValues, action, submitLabel = "Cr
     const fd = new FormData();
     Object.entries(values).forEach(([k, v]) => v != null && fd.set(k, String(v)));
     startTransition(async () => {
-      await action(fd);
+      try {
+        const result = await action(fd);
+        if (result && "id" in result) {
+          router.push(`/projects/${result.id}`);
+        }
+      } catch {
+        toast.error("Couldn't save project", "Please check the form and try again.");
+      }
     });
   }
 

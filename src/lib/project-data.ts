@@ -4,43 +4,40 @@ import type { WorkflowType } from "@prisma/client";
 import type { TaskWithRelations } from "./client-types";
 
 export async function getProjectDetail(id: string, userId: string) {
-  const project = await prisma.project.findFirst({
-    where: { id, ownerId: userId },
-    include: {
-      assignee: true,
-      projectContacts: { include: { contact: true }, orderBy: { role: "asc" } },
-      rfis: {
-        include: { responsibleContact: { select: { id: true, companyName: true } } },
-        orderBy: [{ workflowType: "asc" }, { rfiNumber: "asc" }],
+  // None of these three depend on each other's result, so run them
+  // concurrently instead of round-tripping to the DB one at a time.
+  const [project, tasks, contacts] = await Promise.all([
+    prisma.project.findFirst({
+      where: { id, ownerId: userId },
+      include: {
+        assignee: true,
+        projectContacts: { include: { contact: true }, orderBy: { role: "asc" } },
+        rfis: {
+          include: { responsibleContact: { select: { id: true, companyName: true } } },
+          orderBy: [{ workflowType: "asc" }, { rfiNumber: "asc" }],
+        },
+        documents: { orderBy: { uploadedDate: "desc" } },
+        notes_list: { orderBy: { createdAt: "desc" } },
+        activities: { orderBy: { createdAt: "desc" }, take: 40 },
+        workflows: { orderBy: { type: "asc" } },
+        entities: { orderBy: { createdAt: "asc" } },
       },
-      documents: { orderBy: { uploadedDate: "desc" } },
-      notes_list: { orderBy: { createdAt: "desc" } },
-      activities: { orderBy: { createdAt: "desc" }, take: 40 },
-      workflows: { orderBy: { type: "asc" } },
-      entities: { orderBy: { createdAt: "asc" } },
-    },
-  });
+    }),
+    prisma.task.findMany({
+      where: { projectId: id, parentTaskId: null },
+      orderBy: [{ sortOrder: "asc" }],
+      include: {
+        contact: true,
+        variations: { include: { contact: true }, orderBy: { createdAt: "asc" } },
+      },
+    }),
+    prisma.contact.findMany({
+      where: { ownerId: userId },
+      orderBy: { companyName: "asc" },
+      select: { id: true, companyName: true, contactPerson: true, role: true },
+    }),
+  ]);
   if (!project) return null;
-
-  const tasks = await prisma.task.findMany({
-    where: { projectId: id, parentTaskId: null },
-    orderBy: [{ sortOrder: "asc" }],
-    include: {
-      contact: true,
-      variations: { include: { contact: true }, orderBy: { createdAt: "asc" } },
-    },
-  });
-
-  const contacts = await prisma.contact.findMany({
-    where: { ownerId: userId },
-    orderBy: { companyName: "asc" },
-    select: { id: true, companyName: true, contactPerson: true, role: true },
-  });
-
-  const users = await prisma.user.findMany({
-    where: { id: userId },
-    select: { id: true, name: true },
-  });
 
   // Group tasks by workflow type in canonical order.
   const order: WorkflowType[] = ["PLANNING", "DEVELOPMENT", "LAND_DIVISION"];
@@ -66,6 +63,5 @@ export async function getProjectDetail(id: string, userId: string) {
     flatTasks,
     doneIds,
     contacts,
-    users,
   };
 }

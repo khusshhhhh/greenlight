@@ -126,13 +126,24 @@ export interface NotificationItem {
 /**
  * Derived in-app notifications for a user: overdue tasks, tasks due within 7
  * days, and open RFIs due soon. Returns [] if the user disabled notifications.
+ *
+ * `notificationsEnabled` should be passed in by the caller when already known
+ * (e.g. from a user row fetched alongside this call) to avoid a redundant
+ * lookup of the same row.
  */
-export async function getNotifications(userId: string): Promise<NotificationItem[]> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { notificationsEnabled: true },
-  });
-  if (!user?.notificationsEnabled) return [];
+export async function getNotifications(
+  userId: string,
+  notificationsEnabled?: boolean
+): Promise<NotificationItem[]> {
+  const enabled =
+    notificationsEnabled ??
+    (
+      await prisma.user.findUnique({
+        where: { id: userId },
+        select: { notificationsEnabled: true },
+      })
+    )?.notificationsEnabled;
+  if (!enabled) return [];
 
   const soon = new Date();
   soon.setDate(soon.getDate() + 7);

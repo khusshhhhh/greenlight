@@ -15,22 +15,21 @@ export default async function AppLayout({
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
-  // Fetch account + notifications in parallel to shave a round-trip.
-  const [user, notifications] = await Promise.all([
-    prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: {
-        name: true,
-        email: true,
-        image: true,
-        notificationsEnabled: true,
-        stripeStatus: true,
-        stripeCurrentPeriodEnd: true,
-      },
-    }),
-    getNotifications(session.user.id),
-  ]);
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: {
+      name: true,
+      email: true,
+      image: true,
+      notificationsEnabled: true,
+      stripeStatus: true,
+      stripeCurrentPeriodEnd: true,
+    },
+  });
   if (!user || !isSubscriptionActive(user)) redirect("/billing");
+
+  // Pass the flag we already fetched instead of letting this look it up again.
+  const notifications = await getNotifications(session.user.id, user.notificationsEnabled);
 
   return (
     <div className="flex min-h-screen">

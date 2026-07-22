@@ -94,7 +94,10 @@ export function ProjectActions({
             className="text-destructive focus:text-destructive"
             onSelect={() => {
               if (confirm(`Delete "${project.name}"? This cannot be undone.`)) {
-                startTransition(() => deleteProject(project.id));
+                startTransition(async () => {
+                  await deleteProject(project.id);
+                  router.push("/projects");
+                });
               }
             }}
           >
